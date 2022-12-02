@@ -1,4 +1,4 @@
-package com.leagueBuddy
+package com.leaguebuddy
 
 import org.junit.Test
 
