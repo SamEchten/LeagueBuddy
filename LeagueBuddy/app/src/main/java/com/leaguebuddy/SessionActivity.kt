@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.leaguebuddy.databinding.ActivityRegistrationBinding
+import com.leaguebuddy.fragments.LoginFragment
 
 class SessionActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegistrationBinding
