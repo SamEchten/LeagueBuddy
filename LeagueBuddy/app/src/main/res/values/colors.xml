@@ -10,4 +10,5 @@
     <color name="background">#3a3a3a</color>
     <color name="blueAccent">#4A65EC</color>
     <color name="greyAccent">#535353</color>
+    <color name="navBarAccent">#272727</color>
 </resources>
