@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">LeagueBuddy</string>
+    <string name="welcome_to_the">Welcome to the</string>
+    <string name="league_buddy">League Buddy</string>
+    <string name="password">Password...</string>
+    <string name="repeat_password">Repeat password....</string>
+    <string name="username">Username...</string>
 </resources>
