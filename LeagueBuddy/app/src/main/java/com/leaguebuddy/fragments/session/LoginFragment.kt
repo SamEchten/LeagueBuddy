@@ -31,7 +31,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun login() {
-
+        sessionActivity.showHomeScreen()
     }
 
     override fun onCreateView(

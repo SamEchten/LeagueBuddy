@@ -1,5 +1,6 @@
 package com.leaguebuddy.fragments.session
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import com.leaguebuddy.MainActivity
 import com.leaguebuddy.R
 import com.leaguebuddy.SessionActivity
 
@@ -25,6 +27,7 @@ class RegisterLeagueFragment : Fragment() {
         btnFinish = view.findViewById(R.id.btnFinish)
 
         btnBack.setOnClickListener { sessionActivity.prevFragment() }
+        btnFinish.setOnClickListener { sessionActivity.showHomeScreen() }
     }
 
     override fun onCreateView(

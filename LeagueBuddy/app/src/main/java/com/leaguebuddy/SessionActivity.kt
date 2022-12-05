@@ -1,6 +1,7 @@
 package com.leaguebuddy
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.AttributeSet
 import android.view.View
@@ -30,5 +31,10 @@ class SessionActivity : AppCompatActivity() {
 
     fun prevFragment() {
         supportFragmentManager.popBackStack()
+    }
+
+    fun showHomeScreen() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 }
