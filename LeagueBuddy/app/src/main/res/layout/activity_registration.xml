@@ -65,8 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="@string/username" />
+            android:hint="@string/username" />
 
         <EditText
             android:id="@+id/etPassword"
@@ -75,8 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="@string/password"/>
+            android:hint="@string/password"/>
 
         <EditText
             android:id="@+id/etRepeatPassword"
@@ -85,8 +83,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="@string/repeat_password"/>
+            android:hint="@string/repeat_password"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -97,7 +94,7 @@
             <Button
                 android:id="@+id/btnLogin"
                 style="@style/buttonStyleGrey"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:layout_weight="1"
@@ -106,7 +103,7 @@
             <Button
                 android:id="@+id/btnRegister"
                 style="@style/buttonStyleBlue"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
