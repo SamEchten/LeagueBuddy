@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         tools:targetApi="31">
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".SessionActivity"
+            android:theme="@style/Theme.AppCompat.DayNight"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,7 +26,9 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false">
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight">
+
 
 
             <meta-data

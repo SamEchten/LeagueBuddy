@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegistrationActivity"
+    tools:context=".SessionActivity"
     android:background="@color/background">
 
     <TextView
@@ -24,91 +24,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/league_buddy"
-        android:textSize="30sp"
+        android:textColor="@color/white"
+        android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle1"
-        android:textColor="@color/white"/>
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle1" />
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:padding="35dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle2">
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle2"></FrameLayout>
 
-        <TextView
-            android:id="@+id/tvRegisterTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="@string/register"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:typeface="normal" />
-
-        <TextView
-            android:id="@+id/tvRegistersubTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="@string/please_fill_in_all_the_fields"
-            android:textColor="@color/white" />
-
-        <EditText
-            android:id="@+id/etUserName"
-            style="@style/inputField"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:ems="10"
-            android:hint="@string/username" />
-
-        <EditText
-            android:id="@+id/etPassword"
-            style="@style/inputField"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:ems="10"
-            android:hint="@string/password"/>
-
-        <EditText
-            android:id="@+id/etRepeatPassword"
-            style="@style/inputField"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:ems="10"
-            android:hint="@string/repeat_password"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnLogin"
-                style="@style/buttonStyleGrey"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_weight="1"
-                android:text="@string/login"/>
-
-            <Button
-                android:id="@+id/btnRegister"
-                style="@style/buttonStyleBlue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:text="@string/register"/>
-        </LinearLayout>
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
