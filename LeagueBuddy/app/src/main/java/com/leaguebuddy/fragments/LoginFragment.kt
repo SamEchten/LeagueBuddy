@@ -1,4 +1,4 @@
-package com.leaguebuddy
+package com.leaguebuddy.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import com.leaguebuddy.R
+import com.leaguebuddy.SessionActivity
 
-class RegisterFragment() : Fragment() {
+class LoginFragment : Fragment() {
     private lateinit var etUserName: EditText
     private lateinit var etPassword: EditText
-    private lateinit var etRepeatPassword: EditText
-    private lateinit var btnLogin: Button
     private lateinit var btnRegister: Button
+    private lateinit var btnLogin: Button
     private lateinit var registrationActivity: SessionActivity
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -22,12 +23,10 @@ class RegisterFragment() : Fragment() {
 
         etUserName = view.findViewById(R.id.etUserName)
         etPassword = view.findViewById(R.id.etPassword)
-        etRepeatPassword = view.findViewById(R.id.etRepeatPassword)
-        btnLogin = view.findViewById(R.id.btnLogin)
         btnRegister = view.findViewById(R.id.btnRegister)
+        btnLogin = view.findViewById(R.id.btnLogin)
 
-        btnLogin.setOnClickListener { registrationActivity.replaceFragment(LoginFragment())  }
-        btnRegister.setOnClickListener {  }
+        btnRegister.setOnClickListener { registrationActivity.replaceFragment(RegisterFragment()) }
     }
 
     override fun onCreateView(
@@ -35,6 +34,7 @@ class RegisterFragment() : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register, container, false)
+        return inflater.inflate(R.layout.fragment_login, container, false)
     }
+
 }
