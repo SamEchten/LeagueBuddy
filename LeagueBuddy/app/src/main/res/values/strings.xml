@@ -10,4 +10,12 @@
     <string name="please_fill_in_all_the_fields">Please fill in all the fields.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="discord">Discord</string>
+    <string name="please_fill_in_your_discord_username_so_our_bot_can_communicate_with_you">Please fill in your Discord username so our bot can communicate with you.</string>
+    <string name="username_1234">Username#1234</string>
+    <string name="leagueDiscription">Please fill in your League of Legends username so we can provide you with the best statistics.</string>
+    <string name="league_of_legends">League of Legends</string>
+    <string name="back">back</string>
+    <string name="finish">Finish</string>
+    <string name="next">Next</string>
 </resources>

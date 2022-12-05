@@ -1,4 +1,4 @@
-package com.leaguebuddy.fragments
+package com.leaguebuddy.fragments.session
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -15,18 +15,23 @@ class LoginFragment : Fragment() {
     private lateinit var etPassword: EditText
     private lateinit var btnRegister: Button
     private lateinit var btnLogin: Button
-    private lateinit var registrationActivity: SessionActivity
+    private lateinit var sessionActivity: SessionActivity
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        registrationActivity = activity as SessionActivity
+        sessionActivity = activity as SessionActivity
 
         etUserName = view.findViewById(R.id.etUserName)
         etPassword = view.findViewById(R.id.etPassword)
         btnRegister = view.findViewById(R.id.btnRegister)
         btnLogin = view.findViewById(R.id.btnLogin)
 
-        btnRegister.setOnClickListener { registrationActivity.replaceFragment(RegisterFragment()) }
+        btnRegister.setOnClickListener { sessionActivity.replaceFragment(RegisterFragment()) }
+        btnLogin.setOnClickListener { login() }
+    }
+
+    private fun login() {
+        sessionActivity.showHomeScreen()
     }
 
     override fun onCreateView(
