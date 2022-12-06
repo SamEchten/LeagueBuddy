@@ -12,8 +12,7 @@ import com.leaguebuddy.MainActivity
 import com.leaguebuddy.R
 import com.leaguebuddy.SessionActivity
 
-class RegisterLeagueFragment : Fragment() {
-    private lateinit var sessionActivity: SessionActivity
+class RegisterLeagueFragment : FormFragment() {
     private lateinit var etLeagueName: EditText
     private lateinit var btnBack: Button
     private lateinit var btnFinish: Button
@@ -27,7 +26,26 @@ class RegisterLeagueFragment : Fragment() {
         btnFinish = view.findViewById(R.id.btnFinish)
 
         btnBack.setOnClickListener { sessionActivity.prevFragment() }
-        btnFinish.setOnClickListener { sessionActivity.showHomeScreen() }
+        btnFinish.setOnClickListener { finishRegistration() }
+    }
+
+    private fun finishRegistration() {
+        if(validLeagueId()) {
+            storeForm(mapOf(
+                "leagueId" to etLeagueName.text.toString()
+            ))
+            sessionActivity.showHomeScreen()
+        } else {
+            //LeagueId is not valid
+            println("LeagueID is not valid")
+        }
+    }
+
+    private fun validLeagueId(): Boolean {
+        if(etLeagueName.text.toString().length <= 16) {
+            return true
+        }
+        return false
     }
 
     override fun onCreateView(

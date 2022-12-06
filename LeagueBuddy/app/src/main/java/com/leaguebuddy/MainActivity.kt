@@ -14,12 +14,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportActionBar?.hide()
+
+
     }
 
-    private fun replaceFragment(fragment : Fragment){
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.frameLayout,  fragment)
-        fragmentTransaction.commit();
+    private fun replaceFragment(fragment: Fragment) {
+        with(supportFragmentManager.beginTransaction()) {
+            replace(R.id.mainFrameLayout, fragment)
+            commit()
+        }
     }
 }
