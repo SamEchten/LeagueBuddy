@@ -16,4 +16,6 @@ abstract class FormFragment: Fragment() {
         }
         editor.commit()
     }
+
+    //protected abstract fun validateForm()
 }

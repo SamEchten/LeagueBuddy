@@ -34,6 +34,7 @@ class RegisterLeagueFragment : FormFragment() {
             storeForm(mapOf(
                 "leagueId" to etLeagueName.text.toString()
             ))
+            sessionActivity.registerUser()
             sessionActivity.showHomeScreen()
         } else {
             //LeagueId is not valid
