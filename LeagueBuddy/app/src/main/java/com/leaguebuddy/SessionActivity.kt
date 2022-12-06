@@ -7,11 +7,15 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.leaguebuddy.dataClasses.User
 import com.leaguebuddy.databinding.ActivityRegistrationBinding
 import com.leaguebuddy.fragments.session.LoginFragment
 
 class SessionActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegistrationBinding
+    private val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +31,10 @@ class SessionActivity : AppCompatActivity() {
             replace(R.id.frameLayout, fragment)
             commit()
         }
+    }
+
+    fun insertUserData(user: User) {
+        db.collection("users").add(user)
     }
 
     fun prevFragment() {
