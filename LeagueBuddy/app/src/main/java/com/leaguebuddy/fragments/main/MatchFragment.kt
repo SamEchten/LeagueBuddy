@@ -15,7 +15,6 @@ import com.leaguebuddy.MainActivity
 import com.leaguebuddy.R
 import org.w3c.dom.Text
 
-
 class MatchFragment : Fragment() {
     private lateinit var frameLayout: FrameLayout
     private lateinit var mainActivity: MainActivity
@@ -26,7 +25,18 @@ class MatchFragment : Fragment() {
         mainActivity = activity as MainActivity
         replaceFragment(MatchStatsFragment())
 
+        addClickListeners(view);
+    }
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_match, container, false)
+    }
+
+    private fun addClickListeners(view: View){
         matchStatsBtn = view.findViewById(R.id.btnMatchStats)
         spellTimerBtn = view.findViewById(R.id.btnSpellTimer)
 
@@ -41,17 +51,11 @@ class MatchFragment : Fragment() {
             matchStatsBtn.backgroundTintList = ContextCompat.getColorStateList(mainActivity, R.color.greyAccent)
             spellTimerBtn.backgroundTintList = ContextCompat.getColorStateList(mainActivity, R.color.blueAccent)
         }
-
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_match, container, false)
+    private fun isSummonerInGame(){
+        // If the summoner is NOT in a game display NotInGame fragment else load in game status
     }
-
     private fun replaceFragment(fragment: Fragment) {
         with(childFragmentManager.beginTransaction()) {
             replace(R.id.flMatchFragmentHolder, fragment)
