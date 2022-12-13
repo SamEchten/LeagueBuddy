@@ -3,7 +3,12 @@ package com.leaguebuddy.api
 import com.leaguebuddy.BuildConfig
 import com.leaguebuddy.MainActivity
 import com.leaguebuddy.api.dataclasses.Summoner
+import com.leaguebuddy.exceptions_v2.CouldNotFetchDataException
+import com.leaguebuddy.exceptions_v2.CouldNotFetchSummonerException
+import com.leaguebuddy.exceptions_v2.IncorrectResponseCodeException
+import com.leaguebuddy.exceptions_v2.SummonerNameInvalidException
 import net.pwall.json.schema.JSONSchema
+import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
@@ -17,35 +22,42 @@ import kotlin.io.path.Path
 
 class LeagueApiHelper {
     private var client : OkHttpClient = OkHttpClient()
-    private var apiKey : String = "RGAPI-fa63abaf-4226-4d72-b316-5d9d291edb5b"// Get the api key and decrypt it so we can receive the information
+    private var apiKey : String = "RGAPI-96c64fd9-848f-4f99-98ef-101ddb7b6885"// Get the api key and decrypt it so we can receive the information
 
     fun getSummonerInfo(summonerName: String) : Summoner {
         if(summonerName.length < 16){
-            val url = "https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/$summonerName?api_key=$apiKey"
-            val request : Request = Request.Builder()
+            val url = HttpUrl.Builder()
+                .scheme("https")
+                .host("euw1.api.riotgames.com")
+                .addPathSegment("lol")
+                .addPathSegment("summoner")
+                .addPathSegment("v4")
+                .addPathSegment("summoners")
+                .addPathSegment("by-name")
+                .addPathSegment(summonerName)
+                .addQueryParameter("api_key", apiKey)
+                .build()
+            val request = Request.Builder()
                 .url(url)
                 .build()
-            try {
-                val response = client.newCall(request).execute()
-                if(response.isSuccessful) {
-                    val result = response.body()?.string()
-                    if (result != null) {
-                        if(result.isNotEmpty()) {
-                            return createSummoner(result)
-                        }else {
-                            throw Exception("Could not fetch Summoner")
-                        }
+
+            val response = client.newCall(request).execute()
+            if(response.isSuccessful) {
+                val result = response.body()?.string()
+                if (result != null) {
+                    if(result.isNotEmpty()) {
+                        return createSummoner(result)
                     }else {
-                        throw Exception("Response is empty")
+                        throw CouldNotFetchSummonerException("Could not fetch Summoner")
                     }
                 }else {
-                    throw Exception("Response returned 400-500 status code")
+                    throw CouldNotFetchSummonerException("Could not fetch Summoner")
                 }
-            }catch(e : Exception){
-                throw Exception("Could not fetch data from League API")
+            }else {
+                throw IncorrectResponseCodeException("Response returned 400 - 500 status code",  response.code())
             }
         }else {
-            throw Exception("Summoner name must be smaller than 16 characters")
+            throw SummonerNameInvalidException("Summoner name must be smaller than 16 characters")
         }
 
     }

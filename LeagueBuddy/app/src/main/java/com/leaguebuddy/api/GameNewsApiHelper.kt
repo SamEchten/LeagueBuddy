@@ -2,6 +2,8 @@ package com.leaguebuddy.api
 
 import com.leaguebuddy.api.dataclasses.NewsArticle
 import com.leaguebuddy.api.dataclasses.Summoner
+import com.leaguebuddy.exceptions_v2.CouldNotFetchDataException
+import com.leaguebuddy.exceptions_v2.IncorrectResponseCodeException
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -54,7 +56,7 @@ class GameNewsApiHelper {
 
 
     /**
-     * Function returns a list of all the recent game news articals
+     * Function returns a list of all the recent game news articles
      */
     fun getRecentGameNews() : List<NewsArticle>{
         val url = HttpUrl.Builder()
@@ -69,25 +71,22 @@ class GameNewsApiHelper {
             .header("X-RapidAPI-Key",  apiKey)
             .header("X-RapidAPI-Host",  "videogames-news2.p.rapidapi.com")
             .build()
-        try {
-            val response = client.newCall(request).execute()
-            val result = response.body()?.string()
 
-            if(response.isSuccessful) {
-                if(result != null) {
-                    if(result.isNotEmpty()) {
-                        return createNewsArticles(result)
-                    }else {
-                        throw Exception("Response is empty")
-                    }
+        val response = client.newCall(request).execute()
+        val result = response.body()?.string()
+
+        if(response.isSuccessful) {
+            if(result != null) {
+                if(result.isNotEmpty()) {
+                    return createNewsArticles(result)
                 }else {
-                    throw Exception("Response is empty")
+                    throw CouldNotFetchDataException("Could not get recent news")
                 }
             }else {
-                throw Exception("Response returned 400-500 status code")
+                throw CouldNotFetchDataException("Could not get recent news")
             }
-        } catch(e: Exception) {
-            throw Exception(e)
+        }else {
+            throw IncorrectResponseCodeException("Could not get recent news", response.code())
         }
     }
 

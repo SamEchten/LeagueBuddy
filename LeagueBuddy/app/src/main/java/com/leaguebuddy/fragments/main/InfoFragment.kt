@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.leaguebuddy.R
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class InfoFragment : Fragment() {
@@ -13,6 +15,14 @@ class InfoFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        GlobalScope.launch {
+
+        }
+
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

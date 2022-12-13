@@ -3,20 +3,25 @@ package com.leaguebuddy
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.leaguebuddy.api.GameNewsApiHelper
 import com.leaguebuddy.api.LeagueApiHelper
+import com.leaguebuddy.api.dataclasses.Summoner
 import com.leaguebuddy.databinding.ActivityMainBinding
+import com.leaguebuddy.exceptions_v2.CouldNotFetchDataException
+import com.leaguebuddy.exceptions_v2.CouldNotFetchSummonerException
+import com.leaguebuddy.exceptions_v2.IncorrectResponseCodeException
+import com.leaguebuddy.exceptions_v2.SummonerNameInvalidException
 import com.leaguebuddy.fragments.main.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navBar: BottomNavigationView
     private lateinit var  binding : ActivityMainBinding
+    private lateinit var leagueApi : LeagueApiHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,17 +30,7 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
         replaceFragment(HomeFragment())
 
-        val leagueApi = LeagueApiHelper()
-        val gameNewsApiHelper = GameNewsApiHelper()
-
-        GlobalScope.launch { Dispatchers.IO
-
-            val summonerTask = async { leagueApi.getSummonerInfo("Aeolxs") }
-            //val allNews  = async { gameNewsApiHelper.getNewestGameNews("GTasdasdasd") }
-
-            val data = summonerTask.await()
-            println(data.puuid)
-        }
+        println("DONE")
 
         navBar = findViewById(R.id.navBar)
         navBar.setOnItemSelectedListener {
@@ -49,6 +44,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
     }
+
 
     private fun replaceFragment(fragment: Fragment) {
         with(supportFragmentManager.beginTransaction()) {
