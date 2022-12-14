@@ -92,7 +92,7 @@ class GameNewsApiHelper {
 
     private fun createNewsArticles(result: String): List<NewsArticle> {
         val jsonObj = JSONArray(result)
-        val articles = listOf<NewsArticle>()
+        val articles : MutableList<NewsArticle> = mutableListOf<NewsArticle>()
         for(i in 0 until jsonObj.length()){
             val article = jsonObj.getJSONObject(i)
             val newsArticle = NewsArticle(

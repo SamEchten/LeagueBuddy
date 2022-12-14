@@ -1,4 +1,4 @@
-package com.leaguebuddy.fragments.main
+package com.leaguebuddy.fragments.main.matchFragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,29 +8,22 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.leaguebuddy.R
+import com.leaguebuddy.api.dataclasses.LiveMatch
+import com.leaguebuddy.api.dataclasses.LiveSummoner
+import com.leaguebuddy.fragments.main.MatchFragment
 
 class MatchStatsFragment : Fragment() {
     private lateinit var linearlayoutTeam: LinearLayout
     private lateinit var linearlayoutOpponent: LinearLayout
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         linearlayoutTeam = view.findViewById(R.id.llTeamMates)
         linearlayoutOpponent = view.findViewById(R.id.llOpponent)
 
-        addItemsToLayout(linearlayoutTeam)
-        addItemsToLayout(linearlayoutTeam)
-        addItemsToLayout(linearlayoutTeam)
-        addItemsToLayout(linearlayoutTeam)
-        addItemsToLayout(linearlayoutTeam)
-
-        addItemsToLayout(linearlayoutOpponent)
-        addItemsToLayout(linearlayoutOpponent)
-        addItemsToLayout(linearlayoutOpponent)
-        addItemsToLayout(linearlayoutOpponent)
-        addItemsToLayout(linearlayoutOpponent)
+        loadLiveMatchData()
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,15 +32,38 @@ class MatchStatsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_match_stats, container, false)
     }
 
+    private fun loadLiveMatchData(){
+        try{
+            val liveMatch = (parentFragment as MatchFragment).liveMatch
+            createLiveSummonerItem(liveMatch.participants)
+        }catch (e: Exception){
+            println(e)
+        }
+    }
+
+    private fun createLiveSummonerItem(list: List<LiveSummoner>){
+        for(i in list.indices){
+            val liveSummoner = list[i]
+            if(list[i].teamId == 100) {
+                addItemsToLayout(liveSummoner, linearlayoutTeam)
+            }else {
+                addItemsToLayout(liveSummoner, linearlayoutOpponent)
+            }
+        }
+    }
+
+
     // Needs to get an object with data to create items based on team or opponents
-    private fun addItemsToLayout(layout: LinearLayout){
+    private fun addItemsToLayout(liveSummoner: LiveSummoner,layout: LinearLayout){
         // loop through object and add the match items.
         val view : View = layoutInflater.inflate(R.layout.match_item, null)
         val username: TextView = view.findViewById(R.id.tvLeagueId)
         val rank: TextView = view.findViewById(R.id.tvLeagueRank)
         val winrate: TextView = view.findViewById(R.id.tvWinRate)
 
+        username.text = liveSummoner.summonerName
         layout.addView(view);
     }
+
 
 }

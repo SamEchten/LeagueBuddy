@@ -1,4 +1,4 @@
-package com.leaguebuddy.fragments.main
+package com.leaguebuddy.fragments.main.matchFragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,6 +10,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.findFragment
 import com.leaguebuddy.R
+import com.leaguebuddy.api.dataclasses.LiveSummoner
+import com.leaguebuddy.fragments.main.MatchFragment
 
 class SpellTimerFragment : Fragment() {
     private lateinit var linearLayout: LinearLayout
@@ -17,11 +19,8 @@ class SpellTimerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         linearLayout = view.findViewById(R.id.llSpellTimer)
-        addItemsToLayout(linearLayout)
-        addItemsToLayout(linearLayout)
-        addItemsToLayout(linearLayout)
-        addItemsToLayout(linearLayout)
-        addItemsToLayout(linearLayout)
+
+        loadLiveMatchData()
 
     }
 
@@ -33,11 +32,30 @@ class SpellTimerFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_spell_timer, container, false)
     }
 
-    private fun addItemsToLayout(layout: LinearLayout){
+    private fun loadLiveMatchData(){
+        try{
+            val liveMatch = (parentFragment as MatchFragment).liveMatch
+            createLiveSummonerItem(liveMatch.participants)
+        }catch (e: Exception){
+            println(e)
+        }
+    }
+    private fun createLiveSummonerItem(list: List<LiveSummoner>){
+        for(i in list.indices){
+            val liveSummoner = list[i]
+            if(list[i].teamId == 200) {
+                addItemsToLayout(liveSummoner, linearLayout)
+            }
+        }
+    }
+    private fun addItemsToLayout(liveSummoner: LiveSummoner, layout: LinearLayout){
         // loop through object and add the match items.
         val view : View = layoutInflater.inflate(R.layout.spell_timer_item, null)
+        val summonerName = view.findViewById<TextView>(R.id.tvLeagueId)
         val firstSpell = view.findViewById<ImageView>(R.id.ivFirstSpell)
         val secondSpell = view.findViewById<ImageView>(R.id.ivSecondSpell)
+
+        summonerName.text = liveSummoner.summonerName
 
         firstSpell.setOnClickListener{
             println("Clicked the first spell")
@@ -46,6 +64,10 @@ class SpellTimerFragment : Fragment() {
             println("Clicked the second spell")
         }
         layout.addView(view);
+    }
+
+    private fun getSpellBySpellId(spellId : Int){
+
     }
 
 

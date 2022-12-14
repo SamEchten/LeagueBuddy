@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun replaceFragment(fragment: Fragment) {
         with(supportFragmentManager.beginTransaction()) {
             addToBackStack(null)
