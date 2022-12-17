@@ -35,6 +35,7 @@ class MatchStatsFragment : Fragment() {
     private fun loadLiveMatchData(){
         try{
             val liveMatch = (parentFragment as MatchFragment).liveMatch
+            println(liveMatch)
             createLiveSummonerItem(liveMatch.participants)
         }catch (e: Exception){
             println(e)
@@ -58,8 +59,6 @@ class MatchStatsFragment : Fragment() {
         // loop through object and add the match items.
         val view : View = layoutInflater.inflate(R.layout.match_item, null)
         val username: TextView = view.findViewById(R.id.tvLeagueId)
-        val rank: TextView = view.findViewById(R.id.tvLeagueRank)
-        val winrate: TextView = view.findViewById(R.id.tvWinRate)
 
         username.text = liveSummoner.summonerName
         layout.addView(view);

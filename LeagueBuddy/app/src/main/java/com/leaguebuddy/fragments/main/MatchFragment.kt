@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import com.leaguebuddy.MainActivity
 import com.leaguebuddy.R
@@ -14,9 +15,8 @@ import com.leaguebuddy.api.LeagueApiHelper
 import com.leaguebuddy.api.dataclasses.LiveMatch
 import com.leaguebuddy.fragments.main.matchFragments.MatchStatsFragment
 import com.leaguebuddy.fragments.main.matchFragments.SpellTimerFragment
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import java.lang.Runnable
 
 class MatchFragment : Fragment() {
     private lateinit var frameLayout: FrameLayout
@@ -25,32 +25,38 @@ class MatchFragment : Fragment() {
     private lateinit var spellTimerBtn: Button
     private lateinit var leagueApiHelper: LeagueApiHelper
     private lateinit var linearLayoutHeader: LinearLayout
-    lateinit var testa : String
     lateinit var liveMatch: LiveMatch
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainActivity = activity as MainActivity
-        replaceFragment(NoMatchFragment())
+        leagueApiHelper = LeagueApiHelper()
         linearLayoutHeader = view.findViewById(R.id.llMatchHeader)
 
-        testa = "asda"
+        replaceFragment(NoMatchFragment())
 
-        leagueApiHelper = LeagueApiHelper()
-        GlobalScope.launch { Dispatchers.Main
+        val settingLiveGameData = GlobalScope.async {
+            val task = async {
+                liveMatch = leagueApiHelper.getLiveMatch("RDhFrpGnnXFvnMXphB9oXPEBVoaQVdsrM9_ZDuvllTvfwjmn")
+            }
+        }
+
+        GlobalScope.launch {
             try {
-                liveMatch = leagueApiHelper.getLiveMatch("q_t7xuxUZLz3-QzhYaR3eJqzQ3ugP6vTxm3rEmpqFXEs_ps7")
+                settingLiveGameData.await()
+
                 setLiveHeaderStats(linearLayoutHeader, view)
-                addClickListeners(view);
+                addClickListeners(view)
                 replaceFragment(MatchStatsFragment())
-            }catch (e: Exception){
+                println("Setting live match data to match fragment")
+            }catch (e: Exception) {
                 println(e)
-                replaceFragment(NoMatchFragment())
                 activity?.runOnUiThread(Runnable {
                     Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                 })
             }
         }
+
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -8,16 +8,24 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.findFragment
 import com.leaguebuddy.R
+import com.leaguebuddy.api.LeagueApiHelper
 import com.leaguebuddy.api.dataclasses.LiveSummoner
+import com.leaguebuddy.api.dataclasses.LiveSummonerSpell
 import com.leaguebuddy.fragments.main.MatchFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class SpellTimerFragment : Fragment() {
     private lateinit var linearLayout: LinearLayout
+    private lateinit var leagueApiHelper: LeagueApiHelper;
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        leagueApiHelper = LeagueApiHelper()
         linearLayout = view.findViewById(R.id.llSpellTimer)
 
         loadLiveMatchData()
@@ -43,7 +51,7 @@ class SpellTimerFragment : Fragment() {
     private fun createLiveSummonerItem(list: List<LiveSummoner>){
         for(i in list.indices){
             val liveSummoner = list[i]
-            if(list[i].teamId == 200) {
+            if(liveSummoner.teamId == 100) {
                 addItemsToLayout(liveSummoner, linearLayout)
             }
         }
@@ -51,9 +59,13 @@ class SpellTimerFragment : Fragment() {
     private fun addItemsToLayout(liveSummoner: LiveSummoner, layout: LinearLayout){
         // loop through object and add the match items.
         val view : View = layoutInflater.inflate(R.layout.spell_timer_item, null)
+
         val summonerName = view.findViewById<TextView>(R.id.tvLeagueId)
+
         val firstSpell = view.findViewById<ImageView>(R.id.ivFirstSpell)
         val secondSpell = view.findViewById<ImageView>(R.id.ivSecondSpell)
+        firstSpell.setImageResource(resources.getIdentifier("s_${liveSummoner.spells[0].id}","drawable", view.context.packageName))
+        secondSpell.setImageResource(resources.getIdentifier("s_${liveSummoner.spells[1].id}","drawable", view.context.packageName))
 
         summonerName.text = liveSummoner.summonerName
 
@@ -65,10 +77,5 @@ class SpellTimerFragment : Fragment() {
         }
         layout.addView(view);
     }
-
-    private fun getSpellBySpellId(spellId : Int){
-
-    }
-
 
 }

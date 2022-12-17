@@ -8,44 +8,43 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginBottom="3dp"
         android:background="@drawable/inputfield"
         android:backgroundTint="@color/navBarAccent"
+        android:foregroundTint="#CF9898"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:padding="10dp"
-        android:layout_marginBottom="2dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:gravity="left">
+        app:layout_constraintVertical_bias="1.0">
 
         <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            app:srcCompat="@drawable/ic_baseline_people_24" />
+            android:id="@+id/ivSummonerChampion"
+            android:layout_width="48dp"
+            android:layout_height="64dp"
+            android:layout_weight="1"
+            android:padding="0dp"
+            android:scaleType="fitStart"
+            app:srcCompat="@drawable/aatrox_0" />
 
         <TextView
             android:id="@+id/tvLeagueId"
-            android:layout_width="wrap_content"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="MinxAE" />
-
-        <TextView
-            android:id="@+id/tvLeagueRank"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="Gold 3" />
+            android:gravity="left"
+            android:text="minxAe" />
 
         <TextView
             android:id="@+id/tvWinRate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:text="50%" />
 
     </LinearLayout>
