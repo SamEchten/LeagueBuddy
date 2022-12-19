@@ -76,6 +76,12 @@ dependencies {
     // Lifecycle
     implementation('androidx.lifecycle:lifecycle-runtime-ktx:2.5.1')
 
+    // okHttp .await
+    implementation("ru.gildor.coroutines:kotlin-coroutines-okhttp:1.0")
+
+    // Coil
+    implementation("io.coil-kt:coil:2.2.2")
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'

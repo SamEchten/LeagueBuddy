@@ -27,34 +27,27 @@ class MatchFragment : Fragment() {
     private lateinit var linearLayoutHeader: LinearLayout
     lateinit var liveMatch: LiveMatch
 
+    private var pusiPuu : String = "tecEajzxPe6Up_Y2B26x-rTdHpd07lTBD13vdfWud3TB8BnJux6UEXP7aw"
+    private var BROHAN : String = "1LcBJ3AZathZ8el4_XSd_2GW5sEoUIV7e8jdMsow62IOF-AROCDF0ujlkw"
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainActivity = activity as MainActivity
         leagueApiHelper = LeagueApiHelper()
         linearLayoutHeader = view.findViewById(R.id.llMatchHeader)
-
         replaceFragment(NoMatchFragment())
-
-        val settingLiveGameData = GlobalScope.async {
-            val task = async {
-                liveMatch = leagueApiHelper.getLiveMatch("RDhFrpGnnXFvnMXphB9oXPEBVoaQVdsrM9_ZDuvllTvfwjmn")
-            }
-        }
 
         GlobalScope.launch {
             try {
-                settingLiveGameData.await()
-
+                liveMatch = leagueApiHelper.getLiveMatch(BROHAN)
                 setLiveHeaderStats(linearLayoutHeader, view)
                 addClickListeners(view)
                 replaceFragment(MatchStatsFragment())
                 println("Setting live match data to match fragment")
-            }catch (e: Exception) {
+            }catch (e: Exception){
                 println(e)
-                activity?.runOnUiThread(Runnable {
-                    Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
-                })
             }
+
         }
 
     }
@@ -72,7 +65,7 @@ class MatchFragment : Fragment() {
             val liveGame : TextView = view.findViewById(R.id.tvLiveGame)
 
             liveGame.text = "Live"
-            liveGame.backgroundTintList = ContextCompat.getColorStateList(mainActivity, R.color.blueAccent)
+            liveGame.backgroundTintList = ContextCompat.getColorStateList(mainActivity, R.color.redAccent)
             matchIdTv.text = liveMatch.gameMode
 
         })

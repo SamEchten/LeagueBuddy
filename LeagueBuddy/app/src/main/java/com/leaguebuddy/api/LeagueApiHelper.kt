@@ -1,5 +1,7 @@
 package com.leaguebuddy.api
 
+import android.graphics.Bitmap
+import android.graphics.drawable.DrawableContainer
 import com.leaguebuddy.api.dataclasses.Summoner
 import com.leaguebuddy.api.dataclasses.LiveMatch
 import com.leaguebuddy.api.dataclasses.LiveSummoner
@@ -10,16 +12,16 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import okhttp3.HttpUrl
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import okhttp3.*
 import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
+import ru.gildor.coroutines.okhttp.await
+import java.io.IOException
 
 class LeagueApiHelper {
     private var client : OkHttpClient = OkHttpClient()
-    private var apiKey : String = "RGAPI-443bc79c-150e-42c7-b502-1ad90baa983e"// Get the api key and decrypt it so we can receive the information
+    private var apiKey : String = "RGAPI-566a056c-c0c2-45ff-b001-6568b91ccad4"// Get the api key and decrypt it so we can receive the information
 
     fun getSummonerInfo(summonerName: String) : Summoner {
         if(summonerName.length < 16){
@@ -40,7 +42,7 @@ class LeagueApiHelper {
 
             val response = client.newCall(request).execute()
             if(response.isSuccessful) {
-                val result = response.body()?.string()
+                val result = response.body?.string()
                 if (result != null) {
                     if(result.isNotEmpty()) {
                         return createSummoner(result)
@@ -51,7 +53,9 @@ class LeagueApiHelper {
                     throw CouldNotFetchSummonerException("Could not fetch Summoner")
                 }
             }else {
-                throw IncorrectResponseCodeException("Response returned 400 - 500 status code",  response.code())
+                throw IncorrectResponseCodeException("Response returned 400 - 500 status code",
+                    response.code
+                )
             }
         }else {
             throw SummonerNameInvalidException("Summoner name must be smaller than 16 characters")
@@ -59,7 +63,7 @@ class LeagueApiHelper {
 
     }
 
-    fun getLiveMatch(summonerId: String) : LiveMatch {
+    suspend fun getLiveMatch(summonerId: String) :  LiveMatch{
         val url = HttpUrl.Builder()
             .scheme("https")
             .host("euw1.api.riotgames.com")
@@ -71,13 +75,16 @@ class LeagueApiHelper {
             .addPathSegment(summonerId)
             .addQueryParameter("api_key", apiKey)
             .build()
+
         val request = Request.Builder()
             .url(url)
             .build()
+             println("test")
 
-        val response = client.newCall(request).execute()
+        val response = client.newCall(request).await()
+
         if(response.isSuccessful) {
-            val result = response.body()?.string()
+            val result = response.body?.string()
             if (result != null) {
                 if(result.isNotEmpty()) {
                     return createLiveMatch(result)
@@ -92,7 +99,7 @@ class LeagueApiHelper {
         }
     }
 
-    fun getSummonerSpellsById(spellId: Int, secondSpellId2 : Int) : List<LiveSummonerSpell> {
+    suspend fun getSummonerSpellsById(spellId: Int, secondSpellId2 : Int) : List<LiveSummonerSpell> {
         val url = HttpUrl.Builder()
             .scheme("https")
             .host("ddragon.leagueoflegends.com")
@@ -106,9 +113,9 @@ class LeagueApiHelper {
             .url(url)
             .build()
 
-        val response = client.newCall(request).execute()
+        val response = client.newCall(request).await()
         if(response.isSuccessful) {
-            val result = response.body()?.string()
+            val result = response.body?.string()
             if (result != null) {
                 if(result.isNotEmpty()) {
                     return createLiveSummonerSpell(result, spellId, secondSpellId2)
@@ -119,13 +126,15 @@ class LeagueApiHelper {
                 throw CouldNotFetchSummonerSpellException("Could not fetch Summoner spell")
             }
         }else {
-            throw IncorrectResponseCodeException("Response returned 400 - 500 status code",  response.code())
+            throw IncorrectResponseCodeException("Response returned 400 - 500 status code",
+                response.code
+            )
         }
     }
 
-    fun getChampionInfo(summonerName: String) : Summoner {
+    private suspend fun getChampionNameById(championId: Int) : String {
         val url = HttpUrl.Builder()
-            .scheme("http")
+            .scheme("https")
             .host("ddragon.leagueoflegends.com")
             .addPathSegment("cdn")
             .addPathSegment("12.23.1")
@@ -139,10 +148,10 @@ class LeagueApiHelper {
 
         val response = client.newCall(request).execute()
         if(response.isSuccessful) {
-            val result = response.body()?.string()
+            val result = response.body?.string()
             if (result != null) {
                 if(result.isNotEmpty()) {
-                    return createSummoner(result)
+                    return createChampionNameById(result, championId)
                 }else {
                     throw CouldNotFetchSummonerException("Could not fetch Summoner")
                 }
@@ -150,11 +159,13 @@ class LeagueApiHelper {
                 throw CouldNotFetchSummonerException("Could not fetch Summoner")
             }
         }else {
-            throw IncorrectResponseCodeException("Response returned 400 - 500 status code",  response.code())
+            throw IncorrectResponseCodeException("Response returned 400 - 500 status code",
+                response.code
+            )
         }
     }
 
-    private fun createLiveMatch(result : String) : LiveMatch {
+    private suspend fun createLiveMatch(result : String) : LiveMatch {
         val jsonObject = JSONTokener(result).nextValue() as JSONObject
         val participantsArray = jsonObject.get("participants") as JSONArray
 
@@ -165,45 +176,26 @@ class LeagueApiHelper {
         )
     }
 
-    private fun createLiveSummoners(summoners : JSONArray) : List<LiveSummoner>{
+    private suspend fun createLiveSummoners(summoners : JSONArray) : List<LiveSummoner>{
         val liveSummonerList : MutableList<LiveSummoner> = mutableListOf()
-        var spells : List<LiveSummonerSpell> = listOf()
-        for (i in 0 until summoners.length()){
+        for (i in 0 until summoners.length()) {
             val summoner =  summoners.getJSONObject(i)
-            val spellApi = GlobalScope.async {
-                val spellList = async {
-                    spells = getSummonerSpellsById(summoner.get("spell1Id") as Int, summoner.get("spell2Id") as Int)
-                }
-            }
 
-            GlobalScope.launch { Dispatchers.Main
-                spellApi.await()
+            val spells = getSummonerSpellsById(summoner.get("spell1Id") as Int, summoner.get("spell2Id") as Int)
+            val imagePath = getChampionNameById(summoner.get("championId") as Int)
 
-                val liveSummoner = LiveSummoner(
-                    summoner.get("summonerName") as String,
-                    summoner.get("summonerId") as String,
-                    spells,
-                    summoner.get("championId") as Int,
-                    summoner.get("teamId") as Int,
-                    "Diamond"
-                )
-                liveSummonerList.add(liveSummoner)
-            }
+            val liveSummoner = LiveSummoner(
+                summoner.get("summonerName") as String,
+                summoner.get("summonerId") as String,
+                spells,
+                imagePath,
+                summoner.get("teamId") as Int,
+                "Diamond"
+            )
+            liveSummonerList.add(liveSummoner)
+
         }
         return liveSummonerList
-    }
-
-    private fun createSummoner(result: String) : Summoner {
-        val jsonObject = JSONTokener(result).nextValue() as JSONObject
-
-        return Summoner(
-            jsonObject.getString("id"),
-            jsonObject.getString("accountId"),
-            jsonObject.getString("puuid"),
-            jsonObject.getString("name"),
-            jsonObject.getString("profileIconId")as Int,
-            jsonObject.getString("summonerLevel")as Int
-        )
     }
 
     private fun createLiveSummonerSpell(result: String, spellId: Int, secondSpellId2: Int) : List<LiveSummonerSpell> {
@@ -238,5 +230,34 @@ class LeagueApiHelper {
             }
         }
         return spellList
+    }
+
+    private suspend fun createChampionNameById(result: String, championId: Int) : String {
+        val jsonObject = JSONTokener(result).nextValue() as JSONObject
+        val championsObject = jsonObject.get("data") as JSONObject
+        val championsArray = championsObject.toJSONArray(championsObject.names())
+
+        for(i in 0 until championsArray.length()){
+            val champion = championsArray.get(i) as JSONObject
+            val key = champion.get("key").toString().toInt()
+            val championName = champion.get("name").toString()
+            if(key == championId){
+                return championName
+            }
+        }
+        return "Aatrox"
+    }
+
+    private fun createSummoner(result: String) : Summoner {
+        val jsonObject = JSONTokener(result).nextValue() as JSONObject
+
+        return Summoner(
+            jsonObject.getString("id"),
+            jsonObject.getString("accountId"),
+            jsonObject.getString("puuid"),
+            jsonObject.getString("name"),
+            jsonObject.getString("profileIconId")as Int,
+            jsonObject.getString("summonerLevel")as Int
+        )
     }
 }

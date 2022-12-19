@@ -5,8 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import coil.load
 import com.leaguebuddy.R
 import com.leaguebuddy.api.dataclasses.LiveMatch
 import com.leaguebuddy.api.dataclasses.LiveSummoner
@@ -53,16 +55,18 @@ class MatchStatsFragment : Fragment() {
         }
     }
 
-
     // Needs to get an object with data to create items based on team or opponents
     private fun addItemsToLayout(liveSummoner: LiveSummoner,layout: LinearLayout){
         // loop through object and add the match items.
         val view : View = layoutInflater.inflate(R.layout.match_item, null)
+        val summonerChampImage: ImageView = view.findViewById(R.id.ivSummonerChampion)
         val username: TextView = view.findViewById(R.id.tvLeagueId)
 
+        val imagePath = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${liveSummoner.championImage}_0.jpg"
+
+        summonerChampImage.load(imagePath)
         username.text = liveSummoner.summonerName
         layout.addView(view);
     }
-
 
 }

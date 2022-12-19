@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.findFragment
+import coil.load
 import com.leaguebuddy.R
 import com.leaguebuddy.api.LeagueApiHelper
 import com.leaguebuddy.api.dataclasses.LiveSummoner
@@ -64,6 +65,7 @@ class SpellTimerFragment : Fragment() {
 
         val firstSpell = view.findViewById<ImageView>(R.id.ivFirstSpell)
         val secondSpell = view.findViewById<ImageView>(R.id.ivSecondSpell)
+
         firstSpell.setImageResource(resources.getIdentifier("s_${liveSummoner.spells[0].id}","drawable", view.context.packageName))
         secondSpell.setImageResource(resources.getIdentifier("s_${liveSummoner.spells[1].id}","drawable", view.context.packageName))
 

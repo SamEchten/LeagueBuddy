@@ -34,7 +34,7 @@ class GameNewsApiHelper {
             .build()
         try {
             val response = client.newCall(request).execute()
-            val result = response.body()?.string()
+            val result = response.body?.string()
 
             if(response.isSuccessful) {
                 if(result != null) {
@@ -73,7 +73,7 @@ class GameNewsApiHelper {
             .build()
 
         val response = client.newCall(request).execute()
-        val result = response.body()?.string()
+        val result = response.body?.string()
 
         if(response.isSuccessful) {
             if(result != null) {
@@ -86,7 +86,7 @@ class GameNewsApiHelper {
                 throw CouldNotFetchDataException("Could not get recent news")
             }
         }else {
-            throw IncorrectResponseCodeException("Could not get recent news", response.code())
+            throw IncorrectResponseCodeException("Could not get recent news", response.code)
         }
     }
 

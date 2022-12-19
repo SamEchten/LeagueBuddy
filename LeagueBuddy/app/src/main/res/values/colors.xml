@@ -12,4 +12,5 @@
     <color name="greyAccent">#535353</color>
     <color name="navBarAccent">#272727</color>
     <color name="imageOverlay">#B3000000</color>
+    <color name="redAccent">#FF4545</color>
 </resources>
