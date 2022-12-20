@@ -14,10 +14,17 @@
     <style name="buttonStyleBlue">
         <item name="android:backgroundTint">@color/blueAccent</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">10sp</item>
     </style>
 
     <style name="buttonStyleGrey">
         <item name="android:backgroundTint">@color/greyAccent</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="roundedImageViewRounded">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
     </style>
 </resources>
