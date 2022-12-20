@@ -21,7 +21,7 @@ import java.io.IOException
 
 class LeagueApiHelper {
     private var client : OkHttpClient = OkHttpClient()
-    private var apiKey : String = "RGAPI-566a056c-c0c2-45ff-b001-6568b91ccad4"// Get the api key and decrypt it so we can receive the information
+    private var apiKey : String = "RGAPI-566a056c-c0c2-45ff-b001-6568b91ccad4"// Get the api key and decrypt it so we can receive the information TODO
 
     fun getSummonerInfo(summonerName: String) : Summoner {
         if(summonerName.length < 16){
