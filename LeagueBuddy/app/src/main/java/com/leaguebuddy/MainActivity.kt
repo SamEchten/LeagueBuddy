@@ -20,7 +20,7 @@ import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navBar: BottomNavigationView
-    private lateinit var  binding : ActivityMainBinding
+    private lateinit var binding : ActivityMainBinding
     private lateinit var leagueApi : LeagueApiHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -11,7 +11,7 @@ import com.leaguebuddy.R
 import com.leaguebuddy.SessionActivity
 
 class LoginFragment : Fragment() {
-    private lateinit var etUserName: EditText
+    private lateinit var etEmail: EditText
     private lateinit var etPassword: EditText
     private lateinit var btnRegister: Button
     private lateinit var btnLogin: Button
@@ -21,7 +21,7 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         sessionActivity = activity as SessionActivity
 
-        etUserName = view.findViewById(R.id.etUserName)
+        etEmail = view.findViewById(R.id.etEmail)
         etPassword = view.findViewById(R.id.etPassword)
         btnRegister = view.findViewById(R.id.btnRegister)
         btnLogin = view.findViewById(R.id.btnLogin)
@@ -31,7 +31,10 @@ class LoginFragment : Fragment() {
     }
 
     private fun login() {
-        sessionActivity.showHomeScreen()
+        sessionActivity.login(
+            etEmail.text.toString(),
+            etPassword.text.toString()
+        )
     }
 
     override fun onCreateView(
