@@ -62,7 +62,7 @@ class SessionActivity : AppCompatActivity() {
                 return false
             }
 
-            login(credentials)
+            //login(credentials)
             return true
         } catch(e: LoginException) {
             handleError(e)

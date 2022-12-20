@@ -1,5 +1,4 @@
-package com.leaguebuddy.api.dataclasses
-import android.graphics.Bitmap
+package com.leaguebuddy.dataClasses
 
 data class LiveSummoner(
     val summonerName: String,

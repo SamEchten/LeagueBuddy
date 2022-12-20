@@ -8,17 +8,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.findFragment
-import coil.load
 import com.leaguebuddy.R
 import com.leaguebuddy.api.LeagueApiHelper
-import com.leaguebuddy.api.dataclasses.LiveSummoner
-import com.leaguebuddy.api.dataclasses.LiveSummonerSpell
+import com.leaguebuddy.dataClasses.LiveSummoner
 import com.leaguebuddy.fragments.main.MatchFragment
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class SpellTimerFragment : Fragment() {
     private lateinit var linearLayout: LinearLayout

@@ -1,4 +1,4 @@
-package com.leaguebuddy.exceptions_v2
+package com.leaguebuddy.exceptions
 
 class SummonerNotInGameException(message: String) : Exception(message) {
 

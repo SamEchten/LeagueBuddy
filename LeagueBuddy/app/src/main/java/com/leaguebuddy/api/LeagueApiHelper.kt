@@ -1,23 +1,15 @@
 package com.leaguebuddy.api
 
-import android.graphics.Bitmap
-import android.graphics.drawable.DrawableContainer
-import com.leaguebuddy.api.dataclasses.Summoner
-import com.leaguebuddy.api.dataclasses.LiveMatch
-import com.leaguebuddy.api.dataclasses.LiveSummoner
-import com.leaguebuddy.api.dataclasses.LiveSummonerSpell
-import com.leaguebuddy.exceptions_v2.*
-import kotlinx.coroutines.Dispatchers
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import com.leaguebuddy.dataClasses.Summoner
+import com.leaguebuddy.dataClasses.LiveMatch
+import com.leaguebuddy.dataClasses.LiveSummoner
+import com.leaguebuddy.dataClasses.LiveSummonerSpell
+import com.leaguebuddy.exceptions.*
 import okhttp3.*
 import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
 import ru.gildor.coroutines.okhttp.await
-import java.io.IOException
 
 class LeagueApiHelper {
     private var client : OkHttpClient = OkHttpClient()
@@ -63,7 +55,7 @@ class LeagueApiHelper {
 
     }
 
-    suspend fun getLiveMatch(summonerId: String) :  LiveMatch{
+    suspend fun getLiveMatch(summonerId: String) : LiveMatch {
         val url = HttpUrl.Builder()
             .scheme("https")
             .host("euw1.api.riotgames.com")
@@ -213,20 +205,24 @@ class LeagueApiHelper {
             val description = spell.get("description") as String
 
             if(key == spellId){
-                spellList.add(LiveSummonerSpell(
+                spellList.add(
+                    LiveSummonerSpell(
                     name,
                     key,
                     duration[0] as Int,
                     description
-                ))
+                )
+                )
             }
             if(key == secondSpellId2){
-                spellList.add(LiveSummonerSpell(
+                spellList.add(
+                    LiveSummonerSpell(
                     name,
                     key,
                     duration[0] as Int,
                     description
-                ))
+                )
+                )
             }
         }
         return spellList

@@ -10,16 +10,9 @@ import android.widget.Toast
 import com.leaguebuddy.MainActivity
 import com.leaguebuddy.R
 import com.leaguebuddy.api.GameNewsApiHelper
-import com.leaguebuddy.api.LeagueApiHelper
-import com.leaguebuddy.exceptions_v2.CouldNotFetchDataException
-import com.leaguebuddy.exceptions_v2.CouldNotFetchSummonerException
-import com.leaguebuddy.exceptions_v2.IncorrectResponseCodeException
-import com.leaguebuddy.exceptions_v2.SummonerNameInvalidException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.IOException
 
 class HomeFragment : Fragment() {
     private lateinit var gameNewsApiHelper: GameNewsApiHelper

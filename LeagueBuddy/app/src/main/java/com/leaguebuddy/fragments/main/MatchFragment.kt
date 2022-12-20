@@ -7,12 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
-import com.google.gson.Gson
 import com.leaguebuddy.MainActivity
 import com.leaguebuddy.R
 import com.leaguebuddy.api.LeagueApiHelper
-import com.leaguebuddy.api.dataclasses.LiveMatch
+import com.leaguebuddy.dataClasses.LiveMatch
 import com.leaguebuddy.fragments.main.matchFragments.MatchStatsFragment
 import com.leaguebuddy.fragments.main.matchFragments.SpellTimerFragment
 import kotlinx.coroutines.*

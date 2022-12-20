@@ -1,4 +1,4 @@
-package com.leaguebuddy.api.dataclasses
+package com.leaguebuddy.dataClasses
 
 data class Summoner(
     val id: String,

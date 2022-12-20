@@ -10,8 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import coil.load
 import com.leaguebuddy.R
-import com.leaguebuddy.api.dataclasses.LiveMatch
-import com.leaguebuddy.api.dataclasses.LiveSummoner
+import com.leaguebuddy.dataClasses.LiveSummoner
 import com.leaguebuddy.fragments.main.MatchFragment
 
 class MatchStatsFragment : Fragment() {
@@ -56,7 +55,7 @@ class MatchStatsFragment : Fragment() {
     }
 
     // Needs to get an object with data to create items based on team or opponents
-    private fun addItemsToLayout(liveSummoner: LiveSummoner,layout: LinearLayout){
+    private fun addItemsToLayout(liveSummoner: LiveSummoner, layout: LinearLayout){
         // loop through object and add the match items.
         val view : View = layoutInflater.inflate(R.layout.match_item, null)
         val summonerChampImage: ImageView = view.findViewById(R.id.ivSummonerChampion)
