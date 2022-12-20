@@ -5,10 +5,48 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
+import com.leaguebuddy.MainActivity
 import com.leaguebuddy.R
-
+import com.leaguebuddy.api.GameNewsApiHelper
+import com.leaguebuddy.api.LeagueApiHelper
+import com.leaguebuddy.exceptions_v2.CouldNotFetchDataException
+import com.leaguebuddy.exceptions_v2.CouldNotFetchSummonerException
+import com.leaguebuddy.exceptions_v2.IncorrectResponseCodeException
+import com.leaguebuddy.exceptions_v2.SummonerNameInvalidException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.io.IOException
 
 class HomeFragment : Fragment() {
+    private lateinit var gameNewsApiHelper: GameNewsApiHelper
+    private lateinit var topic : TextView
+    private lateinit var mainActivity: MainActivity
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        gameNewsApiHelper = GameNewsApiHelper()
+
+        GlobalScope.launch { Dispatchers.Main
+            try {
+                val data = gameNewsApiHelper.getRecentGameNews()
+                activity?.runOnUiThread(Runnable {
+
+                })
+            } catch (e: Exception){
+                errorHandler(e)
+            }
+        }
+    }
+
+    private fun errorHandler(e: Exception){
+        activity?.runOnUiThread(Runnable {
+            Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
+        })
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
