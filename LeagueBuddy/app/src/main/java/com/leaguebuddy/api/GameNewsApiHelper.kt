@@ -1,12 +1,13 @@
 package com.leaguebuddy.api
 
 import com.leaguebuddy.dataClasses.NewsArticle
-import com.leaguebuddy.exceptions.CouldNotFetchDataException
-import com.leaguebuddy.exceptions.IncorrectResponseCodeException
+import com.leaguebuddy.exceptions.CouldNotFetchGameNewsDataException
+import com.leaguebuddy.exceptions.IncorrectResponseCodeExceptionGamesNews
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
+import ru.gildor.coroutines.okhttp.await
 
 class GameNewsApiHelper {
     private var client : OkHttpClient = OkHttpClient()
@@ -17,7 +18,7 @@ class GameNewsApiHelper {
      * Function returns a list of all the news articles from a specific game
      * @param game
      */
-    fun getNewestGameNews(game: String) : List<NewsArticle> {
+    suspend fun getGameNewsByTopic(game: String) : List<NewsArticle> {
         val url = HttpUrl.Builder()
             .scheme("https")
             .host("videogames-news2.p.rapidapi.com")
@@ -31,25 +32,21 @@ class GameNewsApiHelper {
             .header("X-RapidAPI-Key",  apiKey)
             .header("X-RapidAPI-Host",  "videogames-news2.p.rapidapi.com")
             .build()
-        try {
-            val response = client.newCall(request).execute()
-            val result = response.body?.string()
+        val response = client.newCall(request).await()
+        val result = response.body?.string()
 
-            if(response.isSuccessful) {
-                if(result != null) {
-                    if(result.isNotEmpty()) {
-                        return createNewsArticles(result)
-                    }else {
-                        throw Exception("Response is empty")
-                    }
+        if(response.isSuccessful) {
+            if(result != null) {
+                if(result.isNotEmpty()) {
+                    return createNewsArticles(result)
                 }else {
-                    throw Exception("Response is empty")
+                    throw CouldNotFetchGameNewsDataException("Could not get news by topic")
                 }
             }else {
-                throw Exception("Response returned 400-500 status code")
+                throw CouldNotFetchGameNewsDataException("Could not get news by topic")
             }
-        } catch(e: Exception) {
-            throw Exception(e)
+        }else {
+            throw IncorrectResponseCodeExceptionGamesNews("Could not get news by topic", response.code)
         }
     }
 
@@ -57,7 +54,7 @@ class GameNewsApiHelper {
     /**
      * Function returns a list of all the recent game news articles
      */
-    fun getRecentGameNews() : List<NewsArticle>{
+    suspend fun getRecentGameNews() : List<NewsArticle>{
         val url = HttpUrl.Builder()
             .scheme("https")
             .host("videogames-news2.p.rapidapi.com")
@@ -70,28 +67,26 @@ class GameNewsApiHelper {
             .header("X-RapidAPI-Key",  apiKey)
             .header("X-RapidAPI-Host",  "videogames-news2.p.rapidapi.com")
             .build()
-
-        val response = client.newCall(request).execute()
+        val response = client.newCall(request).await()
         val result = response.body?.string()
-
         if(response.isSuccessful) {
             if(result != null) {
                 if(result.isNotEmpty()) {
                     return createNewsArticles(result)
                 }else {
-                    throw CouldNotFetchDataException("Could not get recent news")
+                    throw CouldNotFetchGameNewsDataException("Could not get recent news")
                 }
             }else {
-                throw CouldNotFetchDataException("Could not get recent news")
+                throw CouldNotFetchGameNewsDataException("Could not get recent news")
             }
         }else {
-            throw IncorrectResponseCodeException("Could not get recent news", response.code)
+            throw IncorrectResponseCodeExceptionGamesNews("Could not get recent news", response.code)
         }
     }
 
     private fun createNewsArticles(result: String): List<NewsArticle> {
         val jsonObj = JSONArray(result)
-        val articles : MutableList<NewsArticle> = mutableListOf<NewsArticle>()
+        val articles : MutableList<NewsArticle> = mutableListOf()
         for(i in 0 until jsonObj.length()){
             val article = jsonObj.getJSONObject(i)
             val newsArticle = NewsArticle(
@@ -101,7 +96,7 @@ class GameNewsApiHelper {
                 article.get("image").toString(),
                 article.get("link").toString()
             )
-            articles + newsArticle
+            articles.add(newsArticle)
         }
         return articles
     }

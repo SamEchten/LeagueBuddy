@@ -13,4 +13,6 @@
     <color name="navBarAccent">#272727</color>
     <color name="imageOverlay">#B3000000</color>
     <color name="redAccent">#FF4545</color>
+    <color name="underTitle">#999999</color>
+    <color name="newsDate"></color>
 </resources>

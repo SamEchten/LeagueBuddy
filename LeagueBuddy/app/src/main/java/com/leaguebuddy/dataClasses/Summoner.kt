@@ -7,5 +7,4 @@ data class Summoner(
     val name: String,
     val profileIconId : Int,
     val summonerLevel: Int
-
 )

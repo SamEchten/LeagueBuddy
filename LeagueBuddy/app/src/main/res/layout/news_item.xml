@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:id="@+id/llNewsItem"
     android:layout_height="wrap_content"
@@ -8,6 +10,15 @@
     android:backgroundTint="@color/navBarAccent"
     android:padding="10dp"
     android:layout_marginBottom="10dp">
+
+
+    <ImageView
+        android:id="@+id/ivNewsImage"
+        android:layout_width="match_parent"
+        android:layout_height="167dp"
+        android:scaleType="centerCrop"
+        tools:srcCompat="@drawable/aatrox_0"
+        android:layout_marginBottom="5dp"/>
 
     <TextView
         android:id="@+id/tvNewsItemTitle"
@@ -21,10 +32,13 @@
         android:id="@+id/tvNewsItemText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/text_placeholder" />
+        android:text="@string/text_placeholder"
+        android:textColor="@color/underTitle"/>
 
     <TextView
         android:id="@+id/tvNewsItemDate"
+        android:textSize="10sp"
+        android:textColor="@color/underTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/date_placeholder"
