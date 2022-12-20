@@ -62,8 +62,9 @@ class MatchStatsFragment : Fragment() {
         val username: TextView = view.findViewById(R.id.tvLeagueId)
 
         val imagePath = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${liveSummoner.championImage}_0.jpg"
-
-        summonerChampImage.load(imagePath)
+        val imageP = "https://ddragon.leagueoflegends.com/cdn/12.23.1/img/champion/${liveSummoner.championImage}.png"
+        println(imagePath)
+        summonerChampImage.load(imageP)
         username.text = liveSummoner.summonerName
         layout.addView(view);
     }

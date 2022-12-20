@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
+import com.leaguebuddy.LoaderFragment
 import com.leaguebuddy.MainActivity
 import com.leaguebuddy.R
 import com.leaguebuddy.api.LeagueApiHelper
@@ -33,21 +34,19 @@ class MatchFragment : Fragment() {
         mainActivity = activity as MainActivity
         leagueApiHelper = LeagueApiHelper()
         linearLayoutHeader = view.findViewById(R.id.llMatchHeader)
-        replaceFragment(NoMatchFragment())
 
         GlobalScope.launch {
             try {
-                liveMatch = leagueApiHelper.getLiveMatch(BROHAN)
+                replaceFragment(LoaderFragment())
+                liveMatch = leagueApiHelper.getLiveMatch(pusiPuu)
                 setLiveHeaderStats(linearLayoutHeader, view)
                 addClickListeners(view)
                 replaceFragment(MatchStatsFragment())
                 println("Setting live match data to match fragment")
             }catch (e: Exception){
-                println(e)
+                summonerNotInGame()
             }
-
         }
-
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +56,13 @@ class MatchFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_match, container, false)
     }
 
+    private fun summonerNotInGame(){
+        try {
+            replaceFragment(NoMatchFragment())
+        }catch (e: Exception){
+            println(e)
+        }
+    }
     private fun setLiveHeaderStats(layout: LinearLayout, view: View) {
         activity?.runOnUiThread(Runnable {
             val matchIdTv : TextView = view.findViewById(R.id.tvMatchId)

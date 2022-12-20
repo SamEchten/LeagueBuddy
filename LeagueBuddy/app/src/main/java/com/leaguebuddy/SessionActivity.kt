@@ -196,7 +196,7 @@ class SessionActivity : AppCompatActivity() {
         supportFragmentManager.popBackStack()
     }
 
-    private fun showHomeScreen() {
+    fun showHomeScreen() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }

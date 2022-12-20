@@ -14,7 +14,7 @@ import ru.gildor.coroutines.okhttp.await
 class LeagueApiHelper {
     private var client : OkHttpClient = OkHttpClient()
     //Storing api key is here is temporary, for testing purposes only
-    private var apiKey : String = "RGAPI-566a056c-c0c2-45ff-b001-6568b91ccad4"// Get the api key and decrypt it so we can receive the information TODO
+    private var apiKey : String = "RGAPI-ea4a775d-6975-4aeb-83a7-d68f49b23417"// Get the api key and decrypt it so we can receive the information TODO
 
     fun getSummonerInfo(summonerName: String) : Summoner {
         if(summonerName.length < 16){
@@ -222,7 +222,7 @@ class LeagueApiHelper {
                     key,
                     duration[0] as Int,
                     description
-                )
+                    )
                 )
             }
         }
