@@ -23,4 +23,5 @@
     <string name="date_placeholder">Date placeholder</string>
     <string name="text_placeholder">News item text placeholder</string>
     <string name="title_placeholder">Title placeholder</string>
+    <string name="email">Email...</string>
 </resources>

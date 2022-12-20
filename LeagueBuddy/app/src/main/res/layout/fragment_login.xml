@@ -41,13 +41,13 @@
                 android:text="@string/please_fill_in_all_the_fields" />
 
             <EditText
-                android:id="@+id/etUserName"
+                android:id="@+id/etEmail"
                 style="@style/inputField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:ems="10"
-                android:hint="@string/username" />
+                android:hint="@string/email" />
 
             <EditText
                 android:id="@+id/etPassword"

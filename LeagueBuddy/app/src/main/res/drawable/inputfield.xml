@@ -8,7 +8,7 @@
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp"
                 />
-            <corners android:radius="8dip" />
+            <corners android:radius="8dip"/>
         </shape>
     </item>
 </selector>
