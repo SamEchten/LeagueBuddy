@@ -3,6 +3,7 @@ package com.leaguebuddy.fragments.session
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,13 +11,16 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import com.google.common.primitives.UnsignedBytes.toInt
+import com.leaguebuddy.CryptoManager
 import com.leaguebuddy.R
 import com.leaguebuddy.SessionActivity
+import com.leaguebuddy.exceptions.InvalidDiscordIdException
 
 class RegisterDiscordFragment : FormFragment() {
     private lateinit var etDiscordId: EditText
     private lateinit var btnBack: Button
     private lateinit var btnNext: Button
+    private val cryptoManager: CryptoManager = CryptoManager()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,36 +35,41 @@ class RegisterDiscordFragment : FormFragment() {
     }
 
     private fun continueRegistration() {
-        if(validDiscordId()) {
+        try {
+            validateDiscordId()
+
+            val encryptedDiscordId = cryptoManager.encrypt(etDiscordId.text.toString())
             storeForm(mapOf(
-                "discordId" to etDiscordId.text.toString()
+                "discordId" to encryptedDiscordId
             ))
+
+            Log.d(TAG, "Discord id saved")
+
             sessionActivity.replaceFragment(RegisterLeagueFragment())
-        } else {
-            //DiscordId is not valid
-            println("DiscordId is not valid")
+        } catch(e: Exception) {
+            e.message?.let {
+                showToast(it)
+                Log.e(TAG, it) }
         }
     }
 
-    private fun validDiscordId(): Boolean {
+    private fun validateDiscordId() {
         val discordId = etDiscordId.text.toString()
+
         if(!discordId.contains('#')) {
-            return false
+            throw InvalidDiscordIdException()
         }
 
         val id = discordId.split("#")[1]
         if(id.length != 4) {
-            return false
+            throw InvalidDiscordIdException()
         }
 
-        var valid = true;
         for(number in id) {
             if(!number.isDigit()) {
-                valid = false
+                throw InvalidDiscordIdException()
             }
         }
-
-        return valid
     }
 
     override fun onCreateView(

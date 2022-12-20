@@ -1,16 +1,21 @@
 package com.leaguebuddy.fragments.session
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import com.leaguebuddy.CryptoManager
 import com.leaguebuddy.R
 import com.leaguebuddy.SessionActivity
+import com.leaguebuddy.exceptions.InvalidEmailException
+import com.leaguebuddy.exceptions.InvalidFormException
+import com.leaguebuddy.exceptions.InvalidPasswordException
+import com.leaguebuddy.exceptions.InvalidUserNameException
 
 class RegisterFragment() : FormFragment() {
     private lateinit var etUserName: EditText
@@ -19,6 +24,8 @@ class RegisterFragment() : FormFragment() {
     private lateinit var etRepeatPassword: EditText
     private lateinit var btnLogin: Button
     private lateinit var btnRegister: Button
+
+    private val cryptoManager: CryptoManager = CryptoManager()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,53 +43,71 @@ class RegisterFragment() : FormFragment() {
     }
 
     private fun continueRegistration() {
-        if(allFieldsFilledIn()) {
-            if(validUserName()) {
-                if(passwordsMatch()) {
-                    //Encrypt password before storing it
-                    storeForm(mapOf(
-                        "userName" to etUserName.text.toString(),
-                        "email" to etEmail.text.toString(),
-                        "password" to etPassword.text.toString()
-                    ))
-                    sessionActivity.replaceFragment(RegisterDiscordFragment())
-                } else {
-                    //Passwords do not match
-                    println("Passwords do not match")
-                }
-            } else {
-                //Username is not valid
-                println("Username is not valid")
-            }
-        } else {
-            //Not all fields are filled in
-            println("Not all fields are filled in")
+        try {
+            validateForms()
+            validateEmail()
+            validateUserName()
+            validatePasswords()
+
+            val encryptedEmail = cryptoManager.encrypt(etEmail.text.toString())
+            val encryptedPwd = cryptoManager.encrypt(etPassword.text.toString())
+
+            //Store form data to the sharedPreferences
+            storeForm(mapOf(
+                "userName" to etUserName.text.toString(),
+                "email" to encryptedEmail,
+                "password" to encryptedPwd
+            ))
+
+            Log.d(TAG, "First usercredentials saved")
+
+            //Switch fragment to next registration form
+            sessionActivity.replaceFragment(RegisterDiscordFragment())
+        } catch(e: Exception) {
+            e.message?.let {
+                showToast(it)
+                Log.e(TAG, it) }
         }
     }
 
-    private fun validUserName(): Boolean {
-        if(etUserName.text.length < 16) {
-            return true
+    private fun validateUserName() {
+        if(etUserName.text.length > 16) {
+            throw InvalidUserNameException()
         }
-        return false
+
+        if(etUserName.text.contains("#")
+            || etUserName.text.contains("default#")) {
+            throw InvalidUserNameException()
+        }
+        return
     }
 
-    private fun passwordsMatch(): Boolean {
-        if(etPassword.text.toString() == etRepeatPassword.text.toString()) {
-            return true
+    private fun validatePasswords() {
+        if(etPassword.text.toString() != etRepeatPassword.text.toString()) {
+            throw InvalidPasswordException("Passwords do not match.")
         }
-        return false
+
+        if(etPassword.text.toString().length < 6) {
+            throw InvalidPasswordException("Password must be atleast 6 characters long.")
+        }
     }
 
-    private fun allFieldsFilledIn(): Boolean {
+    private fun validateForms() {
         if(etUserName.text.isNotEmpty()
             && etEmail.text.isNotEmpty()
             && etPassword.text.isNotEmpty()
             && etRepeatPassword.text.isNotEmpty()
         ) {
-            return true
+            return
         }
-        return false
+        throw InvalidFormException()
+    }
+
+    private fun validateEmail() {
+        val email = etEmail.text.toString()
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            throw InvalidEmailException()
+        }
     }
 
 
