@@ -56,15 +56,9 @@ class SessionActivity : AppCompatActivity() {
 
     private fun loggedIn(): Boolean {
         try {
-            val credentials = getCredentials()
-            val user = auth.currentUser
-            if(user == null) {
-                return false
-            }
-
-            //login(credentials)
+            auth.currentUser ?: return false
             return true
-        } catch(e: LoginException) {
+        } catch(e: Exception) {
             handleError(e)
             return false
         }
@@ -78,42 +72,15 @@ class SessionActivity : AppCompatActivity() {
         }
     }
 
-    private fun login(credentials: AuthCredential) {
-        auth.signInWithCredential(credentials)
-    }
-
     fun login(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnSuccessListener {
-                //Store user credentials
-                val credentials = EmailAuthProvider.getCredential(email, password)
-                storeLoginCredentials(credentials)
-
                 Log.d(TAG, "userLogin:success")
                 showHomeScreen()
             }
             .addOnFailureListener { exception ->
                 handleError(exception)
             }
-    }
-
-    private fun storeLoginCredentials(credentials: AuthCredential) {
-        val sharedPreferences: SharedPreferences = getSharedPreferences("login", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-
-        val encryptedUid = cryptoManager.encrypt(credentials.toString())
-
-        editor.putString("credentials", encryptedUid)
-        editor.commit()
-    }
-
-    private fun getCredentials(): String {
-        val sharedPreferences: SharedPreferences = getSharedPreferences("login", Context.MODE_PRIVATE)
-        val encryptedUid = sharedPreferences.getString("credentials", "default#credentials")
-        if(encryptedUid != null && encryptedUid != "default#credentials") {
-            return cryptoManager.decrypt(encryptedUid)
-        }
-        throw LoginException("Could not retreive credentials from device.")
     }
 
     fun registerUser() {

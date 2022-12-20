@@ -13,4 +13,6 @@
     <color name="navBarAccent">#272727</color>
     <color name="imageOverlay">#B3000000</color>
     <color name="redAccent">#FF4545</color>
+    <color name="greenAccent">#05b714</color>
+    <color name="underTitle">#999999</color>
 </resources>

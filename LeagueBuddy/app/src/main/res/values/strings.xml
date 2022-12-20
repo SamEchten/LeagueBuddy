@@ -24,4 +24,10 @@
     <string name="text_placeholder">News item text placeholder</string>
     <string name="title_placeholder">Title placeholder</string>
     <string name="email">Email...</string>
+    <string name="your_leaguebuddies">Your leaguebuddies</string>
+    <string name="leaguebuddies">leaguebuddies</string>
+    <string name="your">Your</string>
+    <string name="friends">Friends</string>
+    <string name="below_you_see_all_your_friends_you_have_a_connection_with">Below you see all your friends you have a connection with.</string>
+    <string name="friend_name">Friend_name</string>
 </resources>

@@ -11,7 +11,6 @@ import com.leaguebuddy.fragments.main.*
 class MainActivity : AppCompatActivity() {
     private lateinit var navBar: BottomNavigationView
     private lateinit var binding : ActivityMainBinding
-    private lateinit var leagueApi : LeagueApiHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,8 +18,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
         replaceFragment(HomeFragment())
-
-        println("DONE")
 
         navBar = findViewById(R.id.navBar)
         navBar.setOnItemSelectedListener {
