@@ -1,17 +1,16 @@
 package com.leaguebuddy.api
 
-import com.leaguebuddy.api.dataclasses.NewsArticle
-import com.leaguebuddy.api.dataclasses.Summoner
-import com.leaguebuddy.exceptions_v2.CouldNotFetchDataException
-import com.leaguebuddy.exceptions_v2.IncorrectResponseCodeException
+import com.leaguebuddy.dataClasses.NewsArticle
+import com.leaguebuddy.exceptions.CouldNotFetchDataException
+import com.leaguebuddy.exceptions.IncorrectResponseCodeException
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
-import org.json.JSONObject
 
 class GameNewsApiHelper {
     private var client : OkHttpClient = OkHttpClient()
+    //Storing api key is here is temporary, for testing purposes only
     private var apiKey : String = "2f1a547abdmsh179a9be92a0054dp1ce29ajsnc669ce37838b"// Get the api key and decrypt it so we can receive the information
 
     /**

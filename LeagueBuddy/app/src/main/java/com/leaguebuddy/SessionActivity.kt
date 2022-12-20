@@ -82,7 +82,7 @@ class SessionActivity : AppCompatActivity() {
         auth.signInWithCredential(credentials)
     }
 
-    private fun login(email: String, password: String) {
+    fun login(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnSuccessListener {
                 //Store user credentials
