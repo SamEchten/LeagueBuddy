@@ -6,5 +6,5 @@ data class LiveSummoner(
     val spells: List<LiveSummonerSpell>,
     val championImage: String,
     val teamId: Int,
-    val rank: String
+    val rank: Rank?
 )

@@ -38,7 +38,7 @@ class MatchFragment : Fragment() {
         GlobalScope.launch {
             try {
                 replaceFragment(LoaderFragment())
-                liveMatch = leagueApiHelper.getLiveMatch(pusiPuu)
+                liveMatch = leagueApiHelper.getLiveMatch(BROHAN)
                 setLiveHeaderStats(linearLayoutHeader, view)
                 addClickListeners(view)
                 replaceFragment(MatchStatsFragment())

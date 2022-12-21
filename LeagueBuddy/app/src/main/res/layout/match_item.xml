@@ -25,11 +25,11 @@
         <ImageView
             android:id="@+id/ivSummonerChampion"
             android:layout_width="2dp"
-            android:layout_height="match_parent"
+            android:layout_height="45dp"
             android:layout_weight="1"
             android:background="@drawable/inputfield"
             android:padding="0dp"
-            android:scaleType="fitStart"
+            android:scaleType="centerCrop"
             app:srcCompat="@drawable/aatrox_0" />
 
         <TextView
@@ -38,15 +38,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:gravity="left"
-            android:paddingStart="4dp"
-            android:text="minxAe" />
+            android:paddingStart="8dp"
+            android:text="minxAe"
+            android:textSize="13sp" />
 
-        <TextView
-            android:id="@+id/tvWinRate"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/ivRank"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="50%" />
+            app:srcCompat="@drawable/r_norank" />
 
     </LinearLayout>
 

@@ -1,20 +1,19 @@
 package com.leaguebuddy.api
 
-import com.leaguebuddy.dataClasses.Summoner
-import com.leaguebuddy.dataClasses.LiveMatch
-import com.leaguebuddy.dataClasses.LiveSummoner
-import com.leaguebuddy.dataClasses.LiveSummonerSpell
+import com.leaguebuddy.dataClasses.*
 import com.leaguebuddy.exceptions.*
 import okhttp3.*
 import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
 import ru.gildor.coroutines.okhttp.await
+import java.util.*
+import kotlin.math.roundToInt
 
 class LeagueApiHelper {
     private var client : OkHttpClient = OkHttpClient()
     //Storing api key is here is temporary, for testing purposes only
-    private var apiKey : String = "RGAPI-ea4a775d-6975-4aeb-83a7-d68f49b23417"// Get the api key and decrypt it so we can receive the information TODO
+    private var apiKey : String = "RGAPI-25bed1e8-35e3-44b3-bdf0-07985a9d06a1"// Get the api key and decrypt it so we can receive the information
 
     fun getSummonerInfo(summonerName: String) : Summoner {
         if(summonerName.length < 16){
@@ -72,7 +71,6 @@ class LeagueApiHelper {
         val request = Request.Builder()
             .url(url)
             .build()
-             println("test")
 
         val response = client.newCall(request).await()
 
@@ -89,6 +87,41 @@ class LeagueApiHelper {
             }
         }else {
             throw SummonerNotInGameException("Summoner is not in a game currently")
+        }
+    }
+
+    private suspend fun getRankBySummonerId(summonerId: String) : Rank? {
+        val url = HttpUrl.Builder()
+            .scheme("https")
+            .host("euw1.api.riotgames.com")
+            .addPathSegment("lol")
+            .addPathSegment("league")
+            .addPathSegment("v4")
+            .addPathSegment("entries")
+            .addPathSegment("by-summoner")
+            .addPathSegment(summonerId)
+            .addQueryParameter("api_key", apiKey)
+            .build()
+        val request = Request.Builder()
+            .url(url)
+            .build()
+        val response = client.newCall(request).await()
+        if(response.isSuccessful) {
+            val result = response.body?.string()
+            println(result)
+            if (result != null) {
+                if(result.isNotEmpty()) {
+                    return createRankBySummonerId(result)
+                }else {
+                    throw CouldNotFetchSummonerRankException("Could not fetch summoner rank")
+                }
+            }else {
+                throw CouldNotFetchSummonerRankException("Could not fetch summoner rank")
+            }
+        }else {
+            throw IncorrectResponseCodeException("Response returned 400 - 500 status code",
+                response.code
+            )
         }
     }
 
@@ -139,7 +172,7 @@ class LeagueApiHelper {
             .url(url)
             .build()
 
-        val response = client.newCall(request).execute()
+        val response = client.newCall(request).await()
         if(response.isSuccessful) {
             val result = response.body?.string()
             if (result != null) {
@@ -157,6 +190,7 @@ class LeagueApiHelper {
             )
         }
     }
+
 
     private suspend fun createLiveMatch(result : String) : LiveMatch {
         val jsonObject = JSONTokener(result).nextValue() as JSONObject
@@ -176,6 +210,7 @@ class LeagueApiHelper {
 
             val spells = getSummonerSpellsById(summoner.get("spell1Id") as Int, summoner.get("spell2Id") as Int)
             val imagePath = getChampionNameById(summoner.get("championId") as Int)
+            val rank = getRankBySummonerId(summoner.get("summonerId").toString())
 
             val liveSummoner = LiveSummoner(
                 summoner.get("summonerName") as String,
@@ -183,10 +218,9 @@ class LeagueApiHelper {
                 spells,
                 imagePath,
                 summoner.get("teamId") as Int,
-                "Diamond"
+                rank
             )
             liveSummonerList.add(liveSummoner)
-
         }
         return liveSummonerList
     }
@@ -229,7 +263,7 @@ class LeagueApiHelper {
         return spellList
     }
 
-    private suspend fun createChampionNameById(result: String, championId: Int) : String {
+    private fun createChampionNameById(result: String, championId: Int) : String {
         val jsonObject = JSONTokener(result).nextValue() as JSONObject
         val championsObject = jsonObject.get("data") as JSONObject
         val championsArray = championsObject.toJSONArray(championsObject.names())
@@ -238,11 +272,40 @@ class LeagueApiHelper {
             val champion = championsArray.get(i) as JSONObject
             val key = champion.get("key").toString().toInt()
             val championName = champion.get("name").toString()
+            val imageObj = champion.get("image") as JSONObject
+            val imagePath = imageObj.get("full").toString()
             if(key == championId){
-                return championName
+                return imagePath
             }
         }
-        return "Aatrox"
+        return "Aatrox.png"
+    }
+
+    private fun createRankBySummonerId(result: String): Rank?{
+        val jsonObject = JSONTokener(result).nextValue() as JSONArray
+        if(jsonObject.length() != 0){
+            for(i in 0 until jsonObject.length()){
+                val rankObject = jsonObject.get(i) as JSONObject
+                val rankType = rankObject.get("queueType")
+                if(rankType == "RANKED_SOLO_5x5"){
+                    val wins = rankObject.get("wins").toString().toInt()
+                    val losses = rankObject.get("losses").toString().toInt()
+
+                    val winrate = (wins * 100) / (wins + losses)
+
+                    return Rank(
+                        rankObject.get("tier").toString().lowercase(Locale.getDefault()),
+                        rankObject.get("rank").toString(),
+                        rankObject.get("leaguePoints").toString(),
+                        "${winrate.toDouble().roundToInt()}%",
+                        rankObject.get("hotStreak").toString().toBoolean()
+                    )
+                }
+            }
+        }else {
+            return null
+        }
+        return null
     }
 
     private fun createSummoner(result: String) : Summoner {

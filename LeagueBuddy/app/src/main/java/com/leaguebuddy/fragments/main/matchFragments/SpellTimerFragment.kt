@@ -23,7 +23,6 @@ class SpellTimerFragment : Fragment() {
         linearLayout = view.findViewById(R.id.llSpellTimer)
 
         loadLiveMatchData()
-
     }
 
     override fun onCreateView(
@@ -35,7 +34,7 @@ class SpellTimerFragment : Fragment() {
     }
 
     private fun loadLiveMatchData(){
-        try{
+        try {
             val liveMatch = (parentFragment as MatchFragment).liveMatch
             createLiveSummonerItem(liveMatch.participants)
         }catch (e: Exception){

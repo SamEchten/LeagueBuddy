@@ -36,7 +36,7 @@ class HomeFragment : Fragment() {
         val newsHeader = view.findViewById<TextView>(R.id.tvNewsHeader)
         val topic = view.findViewById<TextView>(R.id.tvTopic)
 
-        setRecentNews()
+        //setRecentNews()
 
         newsHeader.setOnClickListener {
             setRecentNews()

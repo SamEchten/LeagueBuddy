@@ -1,5 +1,6 @@
 package com.leaguebuddy.fragments.main.matchFragments
 
+import android.media.Image
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -60,12 +61,16 @@ class MatchStatsFragment : Fragment() {
         val view : View = layoutInflater.inflate(R.layout.match_item, null)
         val summonerChampImage: ImageView = view.findViewById(R.id.ivSummonerChampion)
         val username: TextView = view.findViewById(R.id.tvLeagueId)
+        val rank: ImageView = view.findViewById(R.id.ivRank)
 
-        val imagePath = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${liveSummoner.championImage}_0.jpg"
-        val imageP = "https://ddragon.leagueoflegends.com/cdn/12.23.1/img/champion/${liveSummoner.championImage}.png"
-        println(imagePath)
+        val imageP = "https://ddragon.leagueoflegends.com/cdn/12.23.1/img/champion/${liveSummoner.championImage}"
+        if(liveSummoner.rank != null){
+            rank.setImageResource(resources.getIdentifier("r_${liveSummoner.rank?.tier}","drawable", view.context.packageName))
+        }
+
         summonerChampImage.load(imageP)
         username.text = liveSummoner.summonerName
+
         layout.addView(view);
     }
 
