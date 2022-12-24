@@ -35,20 +35,41 @@ class SqlDbHelper(context : Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
             db.insert(TABLE_USER, null, values)
             db.close()
         }else {
-            db.rawQuery("DELETE FROM $TABLE_USER", null)
-            db.insert(TABLE_USER, null, values)
-            db.close()
+            updateCredentials(summonerName, summonerId, discordId, profilePicId)
         }
     }
 
-    fun updateSummonerName(summonerName : String) {
+    /**
+     * Update the user credentials sync this with firebase database once use is logged in.
+     * @param columnValue summonerName, summonerId, discordId, profilePicId
+     */
+    fun updateSingleCredential(columnValue : String, column : String) {
         val values =  ContentValues()
+        values.put(column, columnValue)
+        val db = this.writableDatabase
+
+        db.update(TABLE_USER, values, "summonerName = ?", arrayOf(columnValue))
+    }
+
+    /**
+     * Update all user credentials sync this with firebase database once use is logged in.
+     * @param summonerName
+     * @param summonerId
+     * @param discordId
+     * @param profilePicId
+     */
+    fun updateCredentials(summonerName: String, summonerId : String, discordId : String,  profilePicId: Int) {
+        val values = ContentValues()
         values.put(SN_ID, summonerName)
+        values.put(S_ID, summonerId)
+        values.put(D_ID, discordId)
+        values.put(PROFILE_PIC, profilePicId)
         val db = this.writableDatabase
 
         db.update(TABLE_USER, values, "summonerName = ?", arrayOf(summonerName))
-    }
 
+        db.close()
+    }
 
     private fun userHasCredentials() : Boolean{
         val db = this.readableDatabase
@@ -56,8 +77,7 @@ class SqlDbHelper(context : Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return result.count > 0
     }
 
-
-    fun getCurrentUserInfo() : UserV2{
+    fun getCurrentUserCredentials() : UserV2{
         val db = this.readableDatabase
         val result = db.rawQuery("SELECT * FROM $TABLE_USER", null)
         if(result.count > 0) {

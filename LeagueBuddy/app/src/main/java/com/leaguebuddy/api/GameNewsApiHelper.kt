@@ -11,12 +11,11 @@ import ru.gildor.coroutines.okhttp.await
 
 class GameNewsApiHelper {
     private var client : OkHttpClient = OkHttpClient()
-    //Storing api key is here is temporary, for testing purposes only
-    private var apiKey : String = "2f1a547abdmsh179a9be92a0054dp1ce29ajsnc669ce37838b"// Get the api key and decrypt it so we can receive the information
 
     /**
      * Function returns a list of all the news articles from a specific game
      * @param game
+     * @sample NewsArticle
      */
     suspend fun getGameNewsByTopic(game: String) : List<NewsArticle> {
         val url = HttpUrl.Builder()
@@ -53,6 +52,8 @@ class GameNewsApiHelper {
 
     /**
      * Function returns a list of all the recent game news articles
+     * @sample NewsArticle
+     * @return List<NewsArticle>
      */
     suspend fun getRecentGameNews() : List<NewsArticle>{
         val url = HttpUrl.Builder()
@@ -99,5 +100,11 @@ class GameNewsApiHelper {
             articles.add(newsArticle)
         }
         return articles
+    }
+
+    companion object {
+        //Storing api key is here is temporary, for testing purposes only
+        // Get the api key and decrypt it so we can receive the information
+        const val apiKey = "2f1a547abdmsh179a9be92a0054dp1ce29ajsnc669ce37838b"
     }
 }

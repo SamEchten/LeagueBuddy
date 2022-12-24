@@ -13,9 +13,13 @@ import kotlin.math.roundToInt
 
 class LeagueApiHelper {
     private var client : OkHttpClient = OkHttpClient()
-    //Storing api key is here is temporary, for testing purposes only
-    private var apiKey : String = "RGAPI-25bed1e8-35e3-44b3-bdf0-07985a9d06a1"// Get the api key and decrypt it so we can receive the information
 
+    /**
+     * Gets the summoner information needed to call other function.
+     * @param summonerName
+     * @return Summoner
+     * @sample Summoner
+     */
     fun getSummonerInfo(summonerName: String) : Summoner {
         if(summonerName.length < 16){
             val url = HttpUrl.Builder()
@@ -56,6 +60,10 @@ class LeagueApiHelper {
 
     }
 
+    /**
+     * Returns true if a summoner is in a live game at the moment of calling this function
+     * @param summonerId
+     */
     suspend fun summonerInGame(summonerId : String) : Boolean {
         val url = HttpUrl.Builder()
             .scheme("https")
@@ -82,6 +90,10 @@ class LeagueApiHelper {
         }
     }
 
+    /**
+     * Checks if a summoner name exists and returns true if this is the case.
+     * @param summonerName
+     */
     suspend fun summonerNameExists(summonerName : String) : Boolean{
         val url = HttpUrl.Builder()
             .scheme("https")
@@ -107,6 +119,10 @@ class LeagueApiHelper {
         }
     }
 
+    /**
+     * Returns a LiveMatch dataclass. This dataclass contains all the live match information.
+     * @param summonerId
+     */
     suspend fun getLiveMatch(summonerId: String) : LiveMatch {
         val url = HttpUrl.Builder()
             .scheme("https")
@@ -142,6 +158,11 @@ class LeagueApiHelper {
         }
     }
 
+    /**
+     * Gets the rank from a summoner and returns a Rank dataclass object with all information about the summoner his rank.
+     * @param summonerId
+     * @return Rank
+     */
     private suspend fun getRankBySummonerId(summonerId: String) : Rank? {
         val url = HttpUrl.Builder()
             .scheme("https")
@@ -177,7 +198,11 @@ class LeagueApiHelper {
         }
     }
 
-    suspend fun getSummonerSpellsById(spellId: Int, secondSpellId2 : Int) : List<LiveSummonerSpell> {
+    /**
+     * Function is part if
+     * @see createLiveSummoners
+     */
+    private suspend fun getSummonerSpellsById(spellId: Int, secondSpellId2 : Int) : List<LiveSummonerSpell> {
         val url = HttpUrl.Builder()
             .scheme("https")
             .host("ddragon.leagueoflegends.com")
@@ -210,6 +235,12 @@ class LeagueApiHelper {
         }
     }
 
+    /**
+     * Gets the champion name of a single champion by champion Id.
+     * @param  championId
+     * @see createLiveSummoners
+     * @return String
+     */
     private suspend fun getChampionNameById(championId: Int) : String {
         val url = HttpUrl.Builder()
             .scheme("https")
@@ -243,6 +274,11 @@ class LeagueApiHelper {
         }
     }
 
+    /**
+     * Creates the whole liveMatch and returns it.
+     * @param result this is the response of the call
+     * @see  getLiveMatch
+     */
     private suspend fun createLiveMatch(result : String) : LiveMatch {
         val jsonObject = JSONTokener(result).nextValue() as JSONObject
         val participantsArray = jsonObject.get("participants") as JSONArray
@@ -254,6 +290,12 @@ class LeagueApiHelper {
         )
     }
 
+    /**
+     * Combines all the information from the two API's and returns a list of liveSummoners
+     * @param summoners
+     * @see createLiveMatch
+     *
+     */
     private suspend fun createLiveSummoners(summoners : JSONArray) : List<LiveSummoner>{
         val liveSummonerList : MutableList<LiveSummoner> = mutableListOf()
         for (i in 0 until summoners.length()) {
@@ -276,6 +318,14 @@ class LeagueApiHelper {
         return liveSummonerList
     }
 
+    /**
+     * Gets the result and creates the live summoners spells object with all attributes.
+     * @param result
+     * @param spellId
+     * @param secondSpellId2
+     * @see  createLiveSummoners
+     * @sample LiveSummonerSpell
+     */
     private fun createLiveSummonerSpell(result: String, spellId: Int, secondSpellId2: Int) : List<LiveSummonerSpell> {
         val jsonObject = JSONTokener(result).nextValue() as JSONObject
         val data = jsonObject.get("data") as JSONObject
@@ -370,5 +420,11 @@ class LeagueApiHelper {
             jsonObject.getString("profileIconId")as Int,
             jsonObject.getString("summonerLevel")as Int
         )
+    }
+
+    companion object {
+        //Storing api key is here is temporary, for testing purposes only
+        // Get the api key and decrypt it so we can receive the information
+        const val apiKey = "RGAPI-25bed1e8-35e3-44b3-bdf0-07985a9d06a1"
     }
 }
