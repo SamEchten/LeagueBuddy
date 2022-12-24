@@ -1,5 +1,6 @@
 package com.leaguebuddy.api
 
+import android.util.Log
 import com.leaguebuddy.dataClasses.*
 import com.leaguebuddy.exceptions.*
 import okhttp3.*
@@ -53,6 +54,57 @@ class LeagueApiHelper {
             throw SummonerNameInvalidException("Summoner name must be smaller than 16 characters")
         }
 
+    }
+
+    suspend fun summonerInGame(summonerId : String) : Boolean {
+        val url = HttpUrl.Builder()
+            .scheme("https")
+            .host("euw1.api.riotgames.com")
+            .addPathSegment("lol")
+            .addPathSegment("spectator")
+            .addPathSegment("v4")
+            .addPathSegment("active-games")
+            .addPathSegment("by-summoner")
+            .addPathSegment(summonerId)
+            .addQueryParameter("api_key", apiKey)
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        val response = client.newCall(request).await()
+
+        if(response.isSuccessful) {
+            return true
+        }else {
+            throw SummonerNotInGameException("Summoner is not in a game currently")
+        }
+    }
+
+    suspend fun summonerNameExists(summonerName : String) : Boolean{
+        val url = HttpUrl.Builder()
+            .scheme("https")
+            .host("euw1.api.riotgames.com")
+            .addPathSegment("lol")
+            .addPathSegment("summoner")
+            .addPathSegment("v4")
+            .addPathSegment("summoners")
+            .addPathSegment("by-name")
+            .addPathSegment(summonerName)
+            .addQueryParameter("api_key", apiKey)
+            .build()
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        val response = client.newCall(request).execute()
+        if(response.isSuccessful) {
+            return true
+        }else {
+            Log.e("TAG",  "Summoner name does not exist, check response message for more info")
+            throw SummonerNameNotFoundException("Summoner name invalid")
+        }
     }
 
     suspend fun getLiveMatch(summonerId: String) : LiveMatch {
@@ -190,7 +242,6 @@ class LeagueApiHelper {
             )
         }
     }
-
 
     private suspend fun createLiveMatch(result : String) : LiveMatch {
         val jsonObject = JSONTokener(result).nextValue() as JSONObject

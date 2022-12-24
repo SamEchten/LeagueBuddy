@@ -26,6 +26,7 @@ import com.leaguebuddy.exceptions.UserCreationException
 import com.leaguebuddy.fragments.session.LoginFragment
 import com.leaguebuddy.fragments.session.RegisterFragment
 import com.leaguebuddy.fragments.session.RegisterLeagueFragment
+import com.leaguebuddy.sql.SqlDbHelper
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 
@@ -43,6 +44,12 @@ class SessionActivity : AppCompatActivity() {
         sp = getSharedPreferences("registrationForm", Context.MODE_PRIVATE)
         setContentView(binding.root)
         supportActionBar?.hide()
+
+        val sqlDbHelper = SqlDbHelper(this)
+        sqlDbHelper.writableDatabase
+        println(cryptoManager.encrypt("Aeolxs"))
+        //sqlDbHelper.addUser("Aeolxs", "213dajbduy8u9ub2_dyvasdy8v", "sdba#1231")
+
         load()
     }
 
