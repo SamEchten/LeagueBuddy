@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".fragments.main.FriendsFragment">
 
-    <!-- TODO: Update status friends -->
+    <!-- TODO:fix -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -22,7 +22,7 @@
                 android:id="@+id/title_friends"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/Your"
+                android:text="@string/You_want_to_be_leaguebuddies"
                 android:textSize="16sp"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
@@ -40,23 +40,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/Friends"
+                android:text="@string/Username_leaguebuddy"
                 android:layout_marginTop="20dp"
                 android:textSize="14sp"
                 android:textColor="@color/white"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/Below_you_see_all_your_friends_you_have_a_connection_with"
-                android:textColor="@color/white"
-                android:textSize="12sp"/>
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="3">
-                
+                android:layout_height="wrap_content"
+                >
+
+                <EditText
+                    android:id="@+id/etUserName"
+                    style="@style/inputField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:ems="10"
+                    android:hint="@string/Your_soon_to_be_friend" />
+
             </FrameLayout>
 
             <LinearLayout
@@ -68,9 +71,10 @@
                     android:id="@+id/friends_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/FriendsButton"
-
+                    android:text="@string/Send"
                     android:padding="8dp"
+                    android:background="#4A65EC"
+                    android:textColor="@color/white"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     />
@@ -79,23 +83,11 @@
                     android:id="@+id/received_request_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/Received_request"
+                    android:text="@string/Cancel"
                     android:padding="8dp"
-                    android:background="#4A65EC"
-                    android:textColor="@color/white"
                     android:layout_gravity="center"
                     android:layout_weight="1"/>
 
-                <Button
-                    android:id="@+id/outgoing_request_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/Outgoing_request"
-                    android:padding="8dp"
-                    android:background="#4A65EC"
-                    android:textColor="@color/white"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"/>
             </LinearLayout>
 
         </LinearLayout>
