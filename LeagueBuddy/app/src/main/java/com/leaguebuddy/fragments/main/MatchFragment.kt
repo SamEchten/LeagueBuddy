@@ -26,8 +26,7 @@ class MatchFragment : Fragment() {
     private lateinit var linearLayoutHeader: LinearLayout
     lateinit var liveMatch: LiveMatch
 
-    private var pusiPuu : String = "tecEajzxPe6Up_Y2B26x-rTdHpd07lTBD13vdfWud3TB8BnJux6UEXP7aw"
-    private var BROHAN : String = "1LcBJ3AZathZ8el4_XSd_2GW5sEoUIV7e8jdMsow62IOF-AROCDF0ujlkw"
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,12 +36,13 @@ class MatchFragment : Fragment() {
 
         GlobalScope.launch {
             try {
+                println("Setting live match data to match fragment")
                 replaceFragment(LoaderFragment())
-                liveMatch = leagueApiHelper.getLiveMatch(BROHAN)
+                liveMatch = leagueApiHelper.getLiveMatch(RATIRL)
                 setLiveHeaderStats(linearLayoutHeader, view)
                 addClickListeners(view)
                 replaceFragment(MatchStatsFragment())
-                println("Setting live match data to match fragment")
+
             }catch (e: Exception){
                 summonerNotInGame()
             }
@@ -97,6 +97,13 @@ class MatchFragment : Fragment() {
             replace(R.id.flMatchFragmentHolder, fragment)
             commit()
         }
+    }
+
+    companion object {
+        var pusiPuu : String = "tecEajzxPe6Up_Y2B26x-rTdHpd07lTBD13vdfWud3TB8BnJux6UEXP7aw"
+        var BROHAN : String = "1LcBJ3AZathZ8el4_XSd_2GW5sEoUIV7e8jdMsow62IOF-AROCDF0ujlkw"
+        var RATIRL : String = "Vr3IUGGjYJEOOkaqSHiyl-SRsKG055BglnSVfPUjstXA_8s"
+        var Aeolxs : String = "q_t7xuxUZLz3-QzhYaR3eJqzQ3ugP6vTxm3rEmpqFXEs_ps7"
     }
 
 }

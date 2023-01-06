@@ -40,7 +40,7 @@ class SqlDbHelper(context : Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
     }
 
     /**
-     * Update the user credentials sync this with firebase database once use is logged in.
+     * Update the user credentials sync this with firebase database once user is logged in.
      * @param columnValue summonerName, summonerId, discordId, profilePicId
      */
     fun updateSingleCredential(columnValue : String, column : String) {
@@ -71,13 +71,13 @@ class SqlDbHelper(context : Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         db.close()
     }
 
-    private fun userHasCredentials() : Boolean{
+    private fun userHasCredentials() : Boolean {
         val db = this.readableDatabase
         val result = db.rawQuery("SELECT * FROM $TABLE_USER", null)
         return result.count > 0
     }
 
-    fun getCurrentUserCredentials() : UserV2{
+    fun getCurrentUserCredentials() : UserV2 {
         val db = this.readableDatabase
         val result = db.rawQuery("SELECT * FROM $TABLE_USER", null)
         if(result.count > 0) {

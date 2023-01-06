@@ -181,7 +181,6 @@ class LeagueApiHelper {
         val response = client.newCall(request).await()
         if(response.isSuccessful) {
             val result = response.body?.string()
-            println(result)
             if (result != null) {
                 if(result.isNotEmpty()) {
                     return createRankBySummonerId(result)
@@ -199,7 +198,7 @@ class LeagueApiHelper {
     }
 
     /**
-     * Function is part if
+     * Function is part of
      * @see createLiveSummoners
      */
     private suspend fun getSummonerSpellsById(spellId: Int, secondSpellId2 : Int) : List<LiveSummonerSpell> {
@@ -423,8 +422,8 @@ class LeagueApiHelper {
     }
 
     companion object {
-        //Storing api key is here is temporary, for testing purposes only
+        // Storing api key is here is temporary, for testing purposes only
         // Get the api key and decrypt it so we can receive the information
-        const val apiKey = "RGAPI-25bed1e8-35e3-44b3-bdf0-07985a9d06a1"
+        const val apiKey = "RGAPI-c7be5819-d19c-4f06-b865-f3ffb2544aa6"
     }
 }
