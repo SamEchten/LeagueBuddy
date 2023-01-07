@@ -26,8 +26,6 @@ class MatchFragment : Fragment() {
     private lateinit var linearLayoutHeader: LinearLayout
     lateinit var liveMatch: LiveMatch
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainActivity = activity as MainActivity
@@ -38,7 +36,7 @@ class MatchFragment : Fragment() {
             try {
                 println("Setting live match data to match fragment")
                 replaceFragment(LoaderFragment())
-                liveMatch = leagueApiHelper.getLiveMatch(RATIRL)
+                liveMatch = leagueApiHelper.getLiveMatch(kesha)
                 setLiveHeaderStats(linearLayoutHeader, view)
                 addClickListeners(view)
                 replaceFragment(MatchStatsFragment())
@@ -104,6 +102,7 @@ class MatchFragment : Fragment() {
         var BROHAN : String = "1LcBJ3AZathZ8el4_XSd_2GW5sEoUIV7e8jdMsow62IOF-AROCDF0ujlkw"
         var RATIRL : String = "Vr3IUGGjYJEOOkaqSHiyl-SRsKG055BglnSVfPUjstXA_8s"
         var Aeolxs : String = "q_t7xuxUZLz3-QzhYaR3eJqzQ3ugP6vTxm3rEmpqFXEs_ps7"
+        var kesha : String = "YFwLEUnlto9IPJUZH6uwMl8s_5hEFoy3QTWzsofET2KdUP6FT4thp6Rxpw"
     }
 
 }

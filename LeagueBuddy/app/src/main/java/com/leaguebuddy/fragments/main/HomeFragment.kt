@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -40,10 +41,18 @@ class HomeFragment : Fragment() {
 
         newsHeader.setOnClickListener {
             setRecentNews()
+            topic.text = "Latest news"
         }
 
         topic.setOnClickListener {
-
+            val selectMenu = PopupMenu(context, topic)
+            selectMenu.inflate(R.menu.news_nav)
+            selectMenu.setOnMenuItemClickListener {
+                setNewsByTopic(it.title.toString())
+                topic.text = it.title.toString()
+                true
+            }
+            selectMenu.show()
         }
         rvNews = view.findViewById(R.id.rvNews)
         rvNews.adapter = newsAdapter
@@ -59,10 +68,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun setRecentNews(){
+        clear()
+        newsAdapter.notifyDataSetChanged()
         GlobalScope.launch {
             try {
                 val recentNews = gameNewsApiHelper.getRecentGameNews()
-                println(recentNews)
                 for (i in recentNews){
                     addNewsItem(i)
                 }
@@ -73,13 +83,24 @@ class HomeFragment : Fragment() {
     }
 
     private fun setNewsByTopic(topic: String){
+        clear()
         GlobalScope.launch {
-            val recentNews = gameNewsApiHelper.getGameNewsByTopic(topic)
-            for (i in recentNews.indices){
-                val article = recentNews[i]
-                addNewsItem(article)
+            try {
+                val topicNews = gameNewsApiHelper.getGameNewsByTopic(topic)
+                for (i in topicNews){
+                    addNewsItem(i)
+                }
+            }catch (e: Exception) {
+                println(e)
             }
+
         }
+    }
+
+    private fun clear () {
+        val size = newsItems.size;
+        newsItems.clear();
+        newsAdapter.notifyItemRangeRemoved(0, size);
     }
 
 }

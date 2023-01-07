@@ -24,4 +24,9 @@
     <string name="text_placeholder">News item text placeholder</string>
     <string name="title_placeholder">Title placeholder</string>
     <string name="email">Email...</string>
+    <string name="m_league_of_legends"><font color="#000000">League Of Legends</font></string>
+    <string name="m_GTA"><font color="#000000">GTA</font></string>
+    <string name="m_Call_of_Duty"><font color="#000000">Call of Duty</font></string>
+    <string name="m_Dota"><font color="#000000">Dota</font></string>
+    <string name="m_Pokemon"><font color="#000000">Pokemon</font></string>
 </resources>
