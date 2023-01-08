@@ -93,7 +93,6 @@ class HomeFragment : Fragment() {
             }catch (e: Exception) {
                 println(e)
             }
-
         }
     }
 

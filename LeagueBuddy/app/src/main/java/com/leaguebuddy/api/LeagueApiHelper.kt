@@ -346,7 +346,7 @@ class LeagueApiHelper {
                     key,
                     duration[0] as Int,
                     description
-                )
+                    )
                 )
             }
             if(key == secondSpellId2){
