@@ -54,7 +54,7 @@ class RegisterFragment() : FormFragment() {
 
             //Store form data to the sharedPreferences
             storeForm(mapOf(
-                "userName" to etUserName.text.toString(),
+                "userName" to filterInput(etUserName.text.toString()),
                 "email" to encryptedEmail,
                 "password" to encryptedPwd
             ))
@@ -109,7 +109,6 @@ class RegisterFragment() : FormFragment() {
             throw InvalidEmailException()
         }
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
