@@ -3,15 +3,18 @@ const express = require("express")
 const { client } = require("../app")
 const router = express.Router()
 const { authUser } = require("../auth/auth")
+const { decrypt } = require("../encryption/crypto")
 
 //Creates a discord channel for the users team / game
 //Sends 
 router.post("/api/discord/createChannel", authUser, async (req, res) => {
     try {
         validateRequest(req)
-        let id = req.body.user.discordId
-        let gameId = req.body.game.gameId
+        let id = decrypt(req.body.user.discordId)
+        let gameId = decrypt(req.body.game.gameId)
         let teamCode = req.body.game.teamCode
+
+
 
         let user = await fetchUser(id)
         if (user == null) {

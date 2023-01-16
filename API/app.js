@@ -1,11 +1,9 @@
 const express = require("express")
 const dotenv = require("dotenv")
-const path = require("path")
 const https = require("https")
 const fs = require("fs")
 const { Client, GatewayIntentBits } = require("discord.js")
 const admin = require("firebase-admin")
-const { decrypt } = require("./encryption/crypto")
 
 dotenv.config()
 
@@ -55,10 +53,6 @@ client.on("ready", () => {
         console.log("Bot is ready")
     })
 })
-
-const encryptedMessage = new Uint32Array("[B@c2c745a")
-
-console.log(decrypt(encryptedMessage))
 
 client.login(process.env.DISCORD_TOKEN)
 
