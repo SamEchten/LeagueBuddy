@@ -2,6 +2,7 @@ const express = require("express")
 const dotenv = require("dotenv")
 const path = require("path")
 const https = require("https")
+const fs = require("fs")
 const { Client, GatewayIntentBits } = require("discord.js")
 const admin = require("firebase-admin")
 
@@ -24,17 +25,20 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
 })
 
+const httpsOptions = {
+    key: fs.readFileSync("./cert/key.pem"),
+    cert: fs.readFileSync("./cert/cert.pem")
+}
+
 const app = express()
 app.use(express.json())
+const server = https.createServer(httpsOptions, app)
 
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMembers,
         GatewayIntentBits.DirectMessages,
-        GatewayIntentBits.DirectMessageTyping,
-        GatewayIntentBits.DirectMessageReactions,
         GatewayIntentBits.MessageContent
     ]
 })
@@ -43,7 +47,7 @@ client.on("ready", () => {
     const discordRouter = require("./routes/discordRouter")
     app.use(discordRouter)
 
-    app.listen(4848, () => {
+    server.listen(4848, () => {
         console.log("Listening on port 4848")
         console.log("Bot is ready")
     })
