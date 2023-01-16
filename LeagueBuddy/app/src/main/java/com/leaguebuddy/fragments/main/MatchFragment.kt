@@ -1,20 +1,26 @@
 package com.leaguebuddy.fragments.main
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.leaguebuddy.LoaderFragment
 import com.leaguebuddy.MainActivity
 import com.leaguebuddy.R
+import com.leaguebuddy.api.DiscordApiHelper
 import com.leaguebuddy.api.LeagueApiHelper
 import com.leaguebuddy.dataClasses.LiveMatch
 import com.leaguebuddy.fragments.main.matchFragments.MatchStatsFragment
 import com.leaguebuddy.fragments.main.matchFragments.SpellTimerFragment
 import kotlinx.coroutines.*
+import okhttp3.Dispatcher
 import java.lang.Runnable
 
 class MatchFragment : Fragment() {
@@ -22,27 +28,49 @@ class MatchFragment : Fragment() {
     private lateinit var mainActivity: MainActivity
     private lateinit var matchStatsBtn: Button
     private lateinit var spellTimerBtn: Button
-    private lateinit var leagueApiHelper: LeagueApiHelper
+    private var leagueApiHelper: LeagueApiHelper = LeagueApiHelper()
+    private var discordApiHelper : DiscordApiHelper = DiscordApiHelper()
+    private var auth : FirebaseAuth = Firebase.auth
     private lateinit var linearLayoutHeader: LinearLayout
     lateinit var liveMatch: LiveMatch
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainActivity = activity as MainActivity
-        leagueApiHelper = LeagueApiHelper()
+
         linearLayoutHeader = view.findViewById(R.id.llMatchHeader)
 
         GlobalScope.launch {
             try {
-                println("Setting live match data to match fragment")
                 replaceFragment(LoaderFragment())
-                liveMatch = leagueApiHelper.getLiveMatch(kesha)
+
+                // Load in livematch data of current user
+                liveMatch = leagueApiHelper.getLiveMatch(Aeolxs)
+
                 setLiveHeaderStats(linearLayoutHeader, view)
                 addClickListeners(view)
+
                 replaceFragment(MatchStatsFragment())
 
+
+                // Send channel invite
+//                auth.currentUser?.getIdToken(true)?.addOnCompleteListener { task ->
+//                    if(task.isSuccessful){
+//                        GlobalScope.launch{ Dispatchers.IO
+//                            discordApiHelper.sendInviteLink(task.result.token.toString(), "Ouse Minx#6197")
+//                        }
+//                    } else {
+//                      Log.e("AUTH","User is not logged in")
+//                    }
+//                }
             }catch (e: Exception){
                 summonerNotInGame()
+            }
+
+            try {
+                discordApiHelper.sendInviteLink(liveMatch,"asda", "Ouse Minx#6197")
+            }catch (e: Exception) {
+                println(e)
             }
         }
     }

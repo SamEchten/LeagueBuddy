@@ -13,6 +13,7 @@ import kotlin.math.roundToInt
 
 class LeagueApiHelper {
     private var client : OkHttpClient = OkHttpClient()
+    var apikey : String = Keys.lolApiKey()
 
     /**
      * Gets the summoner information needed to call other function.
@@ -31,7 +32,7 @@ class LeagueApiHelper {
                 .addPathSegment("summoners")
                 .addPathSegment("by-name")
                 .addPathSegment(summonerName)
-                .addQueryParameter("api_key", apiKey)
+                .addQueryParameter("api_key", Keys.lolApiKey())
                 .build()
             val request = Request.Builder()
                 .url(url)
@@ -74,7 +75,7 @@ class LeagueApiHelper {
             .addPathSegment("active-games")
             .addPathSegment("by-summoner")
             .addPathSegment(summonerId)
-            .addQueryParameter("api_key", apiKey)
+            .addQueryParameter("api_key", Keys.lolApiKey())
             .build()
 
         val request = Request.Builder()
@@ -104,7 +105,7 @@ class LeagueApiHelper {
             .addPathSegment("summoners")
             .addPathSegment("by-name")
             .addPathSegment(summonerName)
-            .addQueryParameter("api_key", apiKey)
+            .addQueryParameter("api_key", Keys.lolApiKey())
             .build()
         val request = Request.Builder()
             .url(url)
@@ -133,7 +134,7 @@ class LeagueApiHelper {
             .addPathSegment("active-games")
             .addPathSegment("by-summoner")
             .addPathSegment(summonerId)
-            .addQueryParameter("api_key", apiKey)
+            .addQueryParameter("api_key", Keys.lolApiKey())
             .build()
 
         val request = Request.Builder()
@@ -173,7 +174,7 @@ class LeagueApiHelper {
             .addPathSegment("entries")
             .addPathSegment("by-summoner")
             .addPathSegment(summonerId)
-            .addQueryParameter("api_key", apiKey)
+            .addQueryParameter("api_key", Keys.lolApiKey())
             .build()
         val request = Request.Builder()
             .url(url)
@@ -421,9 +422,12 @@ class LeagueApiHelper {
         )
     }
 
-    companion object {
-        // Storing api key is here is temporary, for testing purposes only
-        // Get the api key and decrypt it so we can receive the information
-        const val apiKey = "RGAPI-c7be5819-d19c-4f06-b865-f3ffb2544aa6"
+
+    object Keys {
+        init {
+            System.loadLibrary("native-lib")
+        }
+
+        external fun lolApiKey() : String
     }
 }

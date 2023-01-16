@@ -49,7 +49,7 @@ class SpellTimerFragment : Fragment() {
     private fun createLiveSummonerItem(list: List<LiveSummoner>){
         for(i in list.indices){
             val liveSummoner = list[i]
-            if(liveSummoner.teamId == 100) {
+            if(liveSummoner.teamId == 200) {
                 addItemsToLayout(liveSummoner, linearLayout)
             }
         }
@@ -72,7 +72,7 @@ class SpellTimerFragment : Fragment() {
         summonerName.text = liveSummoner.summonerName
 
         addCheckListeners(liveSummoner.spells[0].duration, btnFirstSpell, ivFirstSpell);
-        addCheckListeners(liveSummoner.spells[0].duration, btnSecondSpell, ivSecondSpell);
+        addCheckListeners(liveSummoner.spells[1].duration, btnSecondSpell, ivSecondSpell);
 
         layout.addView(view);
     }

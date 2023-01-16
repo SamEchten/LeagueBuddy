@@ -8,6 +8,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
 import ru.gildor.coroutines.okhttp.await
+import java.security.Key
 
 class GameNewsApiHelper {
     private var client : OkHttpClient = OkHttpClient()
@@ -28,7 +29,7 @@ class GameNewsApiHelper {
 
         val request : Request = Request.Builder()
             .url(url)
-            .header("X-RapidAPI-Key",  apiKey)
+            .header("X-RapidAPI-Key",  Keys.gApiKey())
             .header("X-RapidAPI-Host",  "videogames-news2.p.rapidapi.com")
             .build()
         val response = client.newCall(request).await()
@@ -65,7 +66,7 @@ class GameNewsApiHelper {
 
         val request : Request = Request.Builder()
             .url(url)
-            .header("X-RapidAPI-Key",  apiKey)
+            .header("X-RapidAPI-Key",  Keys.gApiKey())
             .header("X-RapidAPI-Host",  "videogames-news2.p.rapidapi.com")
             .build()
         val response = client.newCall(request).await()
@@ -102,9 +103,11 @@ class GameNewsApiHelper {
         return articles
     }
 
-    companion object {
-        //Storing api key is here is temporary, for testing purposes only
-        // Get the api key and decrypt it so we can receive the information
-        const val apiKey = "2f1a547abdmsh179a9be92a0054dp1ce29ajsnc669ce37838b"
+    object Keys {
+        init {
+            System.loadLibrary("native-lib")
+        }
+
+        external fun gApiKey() : String
     }
 }
