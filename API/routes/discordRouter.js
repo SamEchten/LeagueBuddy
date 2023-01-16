@@ -4,20 +4,14 @@ const { client } = require("../app")
 const router = express.Router()
 const { authUser } = require("../auth/auth")
 
-//Send message to discord user
-//Body should contain the discordId
-//body: {"discordId": "example#1234"}
+//Creates a discord channel for the users team / game
+//Sends 
 router.post("/api/discord/createChannel", authUser, async (req, res) => {
     try {
+        validateRequest(req)
         let id = req.body.user.discordId
         let gameId = req.body.game.gameId
         let teamCode = req.body.game.teamCode
-
-        if (id == null || gameId == null || teamCode == null) {
-            res.statusMessage = "Invalid body format"
-            res.sendStatus(400).end()
-            return
-        }
 
         let user = await fetchUser(id)
         if (user == null) {
@@ -38,10 +32,23 @@ router.post("/api/discord/createChannel", authUser, async (req, res) => {
         user.send(inviteLink)
         res.sendStatus(200)
     } catch (e) {
-        res.statusMessage = "Something went wrong, please try again."
-        res.send(400)
+        res.statusMessage = e.message
+        res.sendStatus(400)
     }
 })
+
+const validateRequest = (req) => {
+    if (!req.body.user || !req.body.game) {
+        throw new Error("Please provide user and game data.")
+    }
+
+    if (!req.body.user.discordId ||
+        !req.body.user.authKey ||
+        !req.body.game.gameId ||
+        !req.body.game.teamCode) {
+        throw new Error("Please provide the following fields: {discordId, authKey, gameId, teamCode}")
+    }
+}
 
 const findChannelByName = async (channelName) => {
     const g = await guild()

@@ -1,21 +1,19 @@
 const { getAuth } = require("firebase-admin/auth")
 
 const authUser = async (req, res, next) => {
-    if (await validToken(req.body.user.authKey)) {
-        next()
-    } else {
-        res.statusMessage = "User is not authenticated"
-        res.sendStatus(400).end()
-    }
-}
-
-const validToken = async (token) => {
-    try {
-        await getAuth().verifyIdToken(token)
-        return true
-    } catch (e) {
-        return false
-    }
+    getAuth().verifyIdToken(req.body.user.authKey)
+        .then((decodedToken) => {
+            if (decodedToken) {
+                next()
+            } else {
+                res.statusMessage = "User is not authenticated"
+                res.sendStatus(400).end()
+            }
+        })
+        .catch((e) => {
+            res.statusMessage = "User is not authenticated"
+            res.sendStatus(400).end()
+        })
 }
 
 module.exports = { authUser }
