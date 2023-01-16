@@ -45,7 +45,9 @@ const client = new Client({
 
 client.on("ready", () => {
     const discordRouter = require("./routes/discordRouter")
+    const keyRouter = require("./routes/keyRouter")
     app.use(discordRouter)
+    app.use(keyRouter)
 
     server.listen(4848, () => {
         console.log("Listening on port 4848")
