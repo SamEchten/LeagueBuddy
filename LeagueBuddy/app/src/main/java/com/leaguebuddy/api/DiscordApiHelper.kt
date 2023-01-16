@@ -18,7 +18,7 @@ import ru.gildor.coroutines.okhttp.await
 class DiscordApiHelper {
     private var client : OkHttpClient = OkHttpClient()
     private var gson : Gson = Gson()
-    private val BASE_URL = "8a2a-2a02-a467-14f7-1-95c2-4c5f-76da-5d7b.eu.ngrok.io" //Replace with your own ngrok url
+    private val BASE_URL = "548b-2a02-a467-14f7-1-95c2-4c5f-76da-5d7b.eu.ngrok.io" //Replace with your own ngrok url
 
     suspend fun getPublicKey(): String {
         val url = HttpUrl.Builder()

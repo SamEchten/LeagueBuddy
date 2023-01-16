@@ -50,7 +50,7 @@ client.on("ready", () => {
     app.use(keyRouter)
 
     server.listen(443, () => {
-        console.log("Listening on port 4848")
+        console.log("Listening on port 443")
         console.log("Bot is ready")
     })
 })
