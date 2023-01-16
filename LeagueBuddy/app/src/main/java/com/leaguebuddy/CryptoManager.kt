@@ -42,7 +42,7 @@ class CryptoManager {
         }
     }
 
-    fun encryptUsingPublickey(plainText: String, publicKeyString: String): String? {
+    fun encryptUsingPublickey(plainText: String, publicKeyString: String): String {
         val encodedPublicKey = Base64.decode(publicKeyString.replace("\n", ""), 0)
         val keySpec = X509EncodedKeySpec(encodedPublicKey)
         val keyFactory = KeyFactory.getInstance("RSA")

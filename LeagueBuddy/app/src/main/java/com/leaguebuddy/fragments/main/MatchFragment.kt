@@ -34,12 +34,13 @@ class MatchFragment : Fragment() {
     private var auth : FirebaseAuth = Firebase.auth
     private lateinit var linearLayoutHeader: LinearLayout
     lateinit var liveMatch: LiveMatch
-    private val sqlDbHelper = SqlDbHelper(mainActivity)
+    private lateinit var sqlDbHelper: SqlDbHelper
     private val cryptoManager = CryptoManager()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainActivity = activity as MainActivity
+        sqlDbHelper = SqlDbHelper(mainActivity)
 
         linearLayoutHeader = view.findViewById(R.id.llMatchHeader)
 
@@ -47,27 +48,26 @@ class MatchFragment : Fragment() {
             try {
                 replaceFragment(LoaderFragment())
 
+                val user = sqlDbHelper.getCurrentUserCredentials()
                 // Load in livematch data of current user
-                liveMatch = leagueApiHelper.getLiveMatch(Aeolxs)
+                liveMatch = leagueApiHelper.getLiveMatch(user.summonerId)
 
                 setLiveHeaderStats(linearLayoutHeader, view)
                 addClickListeners(view)
 
                 replaceFragment(MatchStatsFragment())
 
-
                 // Send channel invite
                 auth.currentUser?.getIdToken(true)?.addOnCompleteListener { task ->
                     if(task.isSuccessful){
-                        GlobalScope.launch{ Dispatchers.IO
-                            val user = sqlDbHelper.getCurrentUserCredentials()
+                        GlobalScope.launch{
                             var discordId = cryptoManager.decrypt(user.discordId)
-                            val summonerId = cryptoManager.decrypt(user.summonerId)
+                            val summonerId = user.summonerId
                             val publicKey = discordApiHelper.getPublicKey()
 
-                            discordId = cryptoManager.encryptUsingPublickey(discordId, publicKey).toString()
-
-                            discordApiHelper.sendInviteLink(liveMatch, task.result.token.toString(), discordId, summonerId)
+                            var ediscordId: String = cryptoManager.encryptUsingPublickey(discordId, publicKey)
+                            ediscordId = ediscordId.replace("\n", "")
+                            discordApiHelper.sendInviteLink(liveMatch, task.result.token.toString(), ediscordId, summonerId)
                         }
                     } else {
                       Log.e("AUTH","User is not logged in")

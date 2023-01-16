@@ -29,4 +29,6 @@
     <string name="m_Call_of_Duty"><font color="#000000">Call of Duty</font></string>
     <string name="m_Dota"><font color="#000000">Dota</font></string>
     <string name="m_Pokemon"><font color="#000000">Pokemon</font></string>
+    <string name="log_out">Log out</string>
+    <string name="this_page_is_still_under_construction">This page is still under construction</string>
 </resources>

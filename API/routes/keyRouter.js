@@ -4,7 +4,7 @@ const fs = require("fs")
 
 router.get("/api/publickey", async (req, res) => {
     let publicKey = fs.readFileSync("./cert/public_key.pem", "utf-8")
-    res.send({ publicKey: publicKey })
+    res.send(publicKey)
 })
 
 module.exports = router

@@ -18,11 +18,12 @@ import ru.gildor.coroutines.okhttp.await
 class DiscordApiHelper {
     private var client : OkHttpClient = OkHttpClient()
     private var gson : Gson = Gson()
+    private val BASE_URL = "localhost:4848"
 
     suspend fun getPublicKey(): String {
         val url = HttpUrl.Builder()
             .scheme("https")
-            .host("localhost:4848")
+            .host(BASE_URL)
             .addPathSegment("api")
             .addPathSegment("publickey")
             .build()
@@ -33,7 +34,7 @@ class DiscordApiHelper {
 
         val response = client.newCall(request).await()
         if(response.isSuccessful){
-            return response.body.toString()
+            return response.body?.string() ?: ""
         }else  {
             Log.d("Discord bot", "Could not retreive public key")
             throw Exception("Could not retreive public key")
@@ -54,7 +55,7 @@ class DiscordApiHelper {
 
         val url = HttpUrl.Builder()
             .scheme("https")
-            .host("localhost:4848")
+            .host(BASE_URL)
             .addPathSegment("api")
             .addPathSegment("discord")
             .addPathSegment("createChannel")

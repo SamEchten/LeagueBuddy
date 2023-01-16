@@ -4,6 +4,7 @@ const https = require("https")
 const fs = require("fs")
 const { Client, GatewayIntentBits } = require("discord.js")
 const admin = require("firebase-admin")
+const { decrypt } = require("./encryption/crypto")
 
 dotenv.config()
 

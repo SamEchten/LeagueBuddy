@@ -11,10 +11,8 @@ router.post("/api/discord/createChannel", authUser, async (req, res) => {
     try {
         validateRequest(req)
         let id = decrypt(req.body.user.discordId)
-        let gameId = decrypt(req.body.game.gameId)
+        let gameId = req.body.game.gameId
         let teamCode = req.body.game.teamCode
-
-
 
         let user = await fetchUser(id)
         if (user == null) {
@@ -35,6 +33,7 @@ router.post("/api/discord/createChannel", authUser, async (req, res) => {
         user.send(inviteLink)
         res.sendStatus(200)
     } catch (e) {
+        console.log(e)
         res.statusMessage = e.message
         res.sendStatus(400)
     }
@@ -106,7 +105,8 @@ const getUser = async (discordId) => {
 
     list.forEach((value, key) => {
         let user = value["user"]
-        if (user.username == username &&
+
+        if (user.username.toLowerCase() == username &&
             user.discriminator == discriminator) {
             userId = user.id
         }

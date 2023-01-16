@@ -30,7 +30,7 @@ class LoginFragment : Fragment() {
         btnLogin = view.findViewById(R.id.btnLogin)
 
         btnRegister.setOnClickListener { sessionActivity.replaceFragment(RegisterFragment()) }
-        btnLogin.setOnClickListener { sessionActivity.showHomeScreen()}
+        btnLogin.setOnClickListener { login() }
     }
 
     private fun login() {

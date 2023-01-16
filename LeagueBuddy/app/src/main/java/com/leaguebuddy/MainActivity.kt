@@ -7,12 +7,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.leaguebuddy.api.LeagueApiHelper
 import com.leaguebuddy.databinding.ActivityMainBinding
 import com.leaguebuddy.fragments.main.*
+import com.leaguebuddy.sql.SqlDbHelper
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navBar: BottomNavigationView
     private lateinit var binding : ActivityMainBinding
     private lateinit var leagueApi : LeagueApiHelper
     private val cryptoManager: CryptoManager = CryptoManager()
+    private val sqlDbHelper = SqlDbHelper(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +22,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
         replaceFragment(HomeFragment())
+
+        sqlDbHelper.userHasCredentials()
+        println(sqlDbHelper.getCurrentUserCredentials())
 
         navBar = findViewById(R.id.navBar)
         navBar.setOnItemSelectedListener {

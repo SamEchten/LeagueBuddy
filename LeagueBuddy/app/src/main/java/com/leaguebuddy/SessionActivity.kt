@@ -42,8 +42,6 @@ class SessionActivity : AppCompatActivity() {
 
         val sqlDbHelper = SqlDbHelper(this)
         sqlDbHelper.writableDatabase
-        println(cryptoManager.encrypt("Aeolxs"))
-        //sqlDbHelper.addUser("Aeolxs", "213dajbduy8u9ub2_dyvasdy8v", "sdba#1231")
 
         load()
     }

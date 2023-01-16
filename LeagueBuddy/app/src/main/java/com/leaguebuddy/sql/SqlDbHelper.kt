@@ -30,12 +30,9 @@ class SqlDbHelper(context : Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
         val db = this.writableDatabase
 
-        if(!userHasCredentials()){
-            db.insert(TABLE_USER, null, values)
-            db.close()
-        }else {
-            updateCredentials(summonerName, summonerId, discordId, profilePicId)
-        }
+        removeUser()
+        db.insert(TABLE_USER, null, values)
+        db.close()
     }
 
     /**
@@ -47,7 +44,7 @@ class SqlDbHelper(context : Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         values.put(column, columnValue)
         val db = this.writableDatabase
 
-        db.update(TABLE_USER, values, "summonerName = ?", arrayOf(columnValue))
+        db.update(TABLE_USER, values, "id = 1", arrayOf(columnValue))
     }
 
     /**
@@ -65,12 +62,18 @@ class SqlDbHelper(context : Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         values.put(PROFILE_PIC, profilePicId)
         val db = this.writableDatabase
 
-        db.update(TABLE_USER, values, "summonerName = ?", arrayOf(summonerName))
+        db.update(TABLE_USER, values, "id = 1", arrayOf(summonerName))
 
         db.close()
     }
 
-    private fun userHasCredentials() : Boolean {
+    private fun removeUser() {
+        println("removing users from db")
+        val db = this.writableDatabase
+        db.delete(TABLE_USER, "1", null)
+    }
+
+    fun userHasCredentials() : Boolean {
         val db = this.readableDatabase
         val result = db.rawQuery("SELECT * FROM $TABLE_USER", null)
         return result.count > 0
@@ -79,10 +82,10 @@ class SqlDbHelper(context : Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
     fun getCurrentUserCredentials() : UserV2 {
         val db = this.readableDatabase
         val result = db.rawQuery("SELECT * FROM $TABLE_USER", null)
-        if(result.count > 0) {
-            val summonerName = result.getString(result.getColumnIndex("summonerName"))
+        if(result.moveToLast()) {
+            val summonerName = result.getString(1)
             val summonerId = result.getString(result.getColumnIndex("summonerId"))
-            val discordId = result.getString(result.getColumnIndex("discord"))
+            val discordId = result.getString(result.getColumnIndex("discordId"))
             val profilePicId = result.getString(result.getColumnIndex("profilePicId"))
 
             db.close()
