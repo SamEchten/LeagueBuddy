@@ -21,6 +21,7 @@
             android:paddingEnd="35dp"
 
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -35,9 +36,11 @@
 
             <TextView
                 android:id="@+id/tvRegistersubTitle"
+                android:textColor="#a5a5a5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
+                android:paddingBottom="7dp"
                 android:text="@string/please_fill_in_all_the_fields" />
 
             <EditText
@@ -65,8 +68,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:ems="10"
-                android:inputType="textPassword"
-                android:hint="@string/password" />
+                android:hint="@string/password"
+                android:inputType="textPassword" />
 
             <EditText
                 android:id="@+id/etRepeatPassword"
@@ -75,8 +78,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:ems="10"
-                android:inputType="textPassword"
-                android:hint="@string/repeat_password" />
+                android:hint="@string/repeat_password"
+                android:inputType="textPassword" />
 
         </LinearLayout>
 

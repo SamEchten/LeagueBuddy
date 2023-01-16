@@ -1,16 +1,21 @@
 package com.leaguebuddy.fragments.main.matchFragments
 
+import android.content.IntentSender.OnFinished
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.ToggleButton
 import com.leaguebuddy.R
 import com.leaguebuddy.api.LeagueApiHelper
 import com.leaguebuddy.dataClasses.LiveSummoner
+import com.leaguebuddy.dataClasses.LiveSummonerSpell
 import com.leaguebuddy.fragments.main.MatchFragment
 
 class SpellTimerFragment : Fragment() {
@@ -23,7 +28,6 @@ class SpellTimerFragment : Fragment() {
         linearLayout = view.findViewById(R.id.llSpellTimer)
 
         loadLiveMatchData()
-
     }
 
     override fun onCreateView(
@@ -35,7 +39,7 @@ class SpellTimerFragment : Fragment() {
     }
 
     private fun loadLiveMatchData(){
-        try{
+        try {
             val liveMatch = (parentFragment as MatchFragment).liveMatch
             createLiveSummonerItem(liveMatch.participants)
         }catch (e: Exception){
@@ -45,7 +49,7 @@ class SpellTimerFragment : Fragment() {
     private fun createLiveSummonerItem(list: List<LiveSummoner>){
         for(i in list.indices){
             val liveSummoner = list[i]
-            if(liveSummoner.teamId == 100) {
+            if(liveSummoner.teamId == 200) {
                 addItemsToLayout(liveSummoner, linearLayout)
             }
         }
@@ -56,21 +60,45 @@ class SpellTimerFragment : Fragment() {
 
         val summonerName = view.findViewById<TextView>(R.id.tvLeagueId)
 
-        val firstSpell = view.findViewById<ImageView>(R.id.ivFirstSpell)
-        val secondSpell = view.findViewById<ImageView>(R.id.ivSecondSpell)
+        val ivFirstSpell = view.findViewById<ImageView>(R.id.ivFirstSpell)
+        val ivSecondSpell = view.findViewById<ImageView>(R.id.ivSecondSpell)
 
-        firstSpell.setImageResource(resources.getIdentifier("s_${liveSummoner.spells[0].id}","drawable", view.context.packageName))
-        secondSpell.setImageResource(resources.getIdentifier("s_${liveSummoner.spells[1].id}","drawable", view.context.packageName))
+        val btnFirstSpell = view.findViewById<ToggleButton>(R.id.btnFirstSpellTimer)
+        val btnSecondSpell = view.findViewById<ToggleButton>(R.id.btnSecondSpellTimer)
+
+        ivFirstSpell.setImageResource(resources.getIdentifier("s_${liveSummoner.spells[0].id}","drawable", view.context.packageName))
+        ivSecondSpell.setImageResource(resources.getIdentifier("s_${liveSummoner.spells[1].id}","drawable", view.context.packageName))
 
         summonerName.text = liveSummoner.summonerName
 
-        firstSpell.setOnClickListener{
-            println("Clicked the first spell")
-        }
-        secondSpell.setOnClickListener{
-            println("Clicked the second spell")
-        }
+        addCheckListeners(liveSummoner.spells[0].duration, btnFirstSpell, ivFirstSpell);
+        addCheckListeners(liveSummoner.spells[1].duration, btnSecondSpell, ivSecondSpell);
+
         layout.addView(view);
     }
+
+    private fun addCheckListeners(duration : Int, btn : ToggleButton, imageView: ImageView ){
+        val timer = object : CountDownTimer((duration * 1000).toLong(), 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                btn.text = (millisUntilFinished / 1000).toString()
+            }
+            override fun onFinish() {
+                btn.text = ""
+                imageView.alpha  = 1f
+            }
+        }
+        btn.setOnCheckedChangeListener{ _, isChecked ->
+            if(isChecked){
+                imageView.alpha  = 0.30f
+                timer.start()
+            }else {
+                timer.cancel()
+                btn.text = ""
+                imageView.alpha  = 1f
+            }
+        }
+
+    }
+
 
 }

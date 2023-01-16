@@ -2,9 +2,8 @@
 <resources>
     <style name="inputField">
         <item name="android:background">@drawable/inputfield</item>
-        <item name="android:backgroundTint">@color/white</item>
         <item name="android:paddingLeft">10dp</item>
-        <item name="android:textColor">@color/greyAccent</item>
+        <item name="android:color">@color/white</item>
         <item name="android:textSize">15sp</item>
         <item name="android:minHeight">48dp</item>
         <item name="android:layout_marginBottom">10dp</item>
