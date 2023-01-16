@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/m_league_of_legends"
+        android:id="@+id/news_menu_item_1"/>
+    <item android:title="@string/m_Call_of_Duty"
+        android:id="@+id/news_menu_item_2" />
+    <item android:title="@string/m_Dota"
+        android:id="@+id/news_menu_item_3" />
+    <item android:title="@string/m_GTA"
+        android:id="@+id/news_menu_item_4" />
+    <item android:title="@string/m_Pokemon"
+        android:id="@+id/news_menu_item_5" />
+</menu>

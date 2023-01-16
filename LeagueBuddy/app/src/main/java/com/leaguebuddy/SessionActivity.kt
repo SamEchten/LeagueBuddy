@@ -3,31 +3,25 @@ package com.leaguebuddy
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.net.Credentials
 import android.os.Bundle
 import android.util.Log
+import android.util.Patterns
 import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.leaguebuddy.api.LeagueApiHelper
+import com.leaguebuddy.dataClasses.Summoner
 import com.leaguebuddy.dataClasses.User
 import com.leaguebuddy.databinding.ActivityRegistrationBinding
-import com.leaguebuddy.exceptions.FirebaseSignupException
-import com.leaguebuddy.exceptions.LoginException
-import com.leaguebuddy.exceptions.UserCreationException
+import com.leaguebuddy.exceptions.*
 import com.leaguebuddy.fragments.session.LoginFragment
-import com.leaguebuddy.fragments.session.RegisterFragment
-import com.leaguebuddy.fragments.session.RegisterLeagueFragment
+import com.leaguebuddy.sql.SqlDbHelper
 import kotlinx.coroutines.*
-import kotlinx.coroutines.tasks.await
 
 class SessionActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegistrationBinding
@@ -36,6 +30,8 @@ class SessionActivity : AppCompatActivity() {
     private val auth = Firebase.auth
     private val cryptoManager: CryptoManager = CryptoManager()
     private val TAG = "REGISTRATION"
+    private val sqlDbHelper: SqlDbHelper = SqlDbHelper(this)
+    private val leagueApiHelper: LeagueApiHelper = LeagueApiHelper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +39,12 @@ class SessionActivity : AppCompatActivity() {
         sp = getSharedPreferences("registrationForm", Context.MODE_PRIVATE)
         setContentView(binding.root)
         supportActionBar?.hide()
+
+        val sqlDbHelper = SqlDbHelper(this)
+        sqlDbHelper.writableDatabase
+        println(cryptoManager.encrypt("Aeolxs"))
+        //sqlDbHelper.addUser("Aeolxs", "213dajbduy8u9ub2_dyvasdy8v", "sdba#1231")
+
         load()
     }
 
@@ -56,13 +58,7 @@ class SessionActivity : AppCompatActivity() {
 
     private fun loggedIn(): Boolean {
         try {
-            val credentials = getCredentials()
-            val user = auth.currentUser
-            if(user == null) {
-                return false
-            }
-
-            login(credentials)
+            val user = auth.currentUser ?: return false
             return true
         } catch(e: LoginException) {
             handleError(e)
@@ -78,11 +74,7 @@ class SessionActivity : AppCompatActivity() {
         }
     }
 
-    private fun login(credentials: AuthCredential) {
-        auth.signInWithCredential(credentials)
-    }
-
-    private fun login(email: String, password: String) {
+    fun login(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnSuccessListener {
                 //Store user credentials
@@ -107,15 +99,6 @@ class SessionActivity : AppCompatActivity() {
         editor.commit()
     }
 
-    private fun getCredentials(): String {
-        val sharedPreferences: SharedPreferences = getSharedPreferences("login", Context.MODE_PRIVATE)
-        val encryptedUid = sharedPreferences.getString("credentials", "default#credentials")
-        if(encryptedUid != null && encryptedUid != "default#credentials") {
-            return cryptoManager.decrypt(encryptedUid)
-        }
-        throw LoginException("Could not retreive credentials from device.")
-    }
-
     fun registerUser() {
         val userCredentials = getEncryptedCredentials()
         val email = userCredentials["email"]
@@ -126,13 +109,20 @@ class SessionActivity : AppCompatActivity() {
         }
 
         try {
+            validateEmail(email)
             firebaseCreateUser(email, password)
         } catch(e: Exception) {
             handleError(e)
         }
     }
 
-    private fun handleError(e: Exception) {
+    private fun validateEmail(email: String) {
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            throw InvalidEmailException()
+        }
+    }
+
+   private fun handleError(e: Exception) {
         showToast(e.message.toString())
         Log.e(TAG, e.message.toString())
     }
@@ -171,7 +161,23 @@ class SessionActivity : AppCompatActivity() {
         try {
             val user: User = createUser(uid)
             db.collection("users").add(user)
-            Log.d(TAG, "userInsert:success")
+
+            GlobalScope.launch {
+                try {
+                    val summonerName = sp.getString("leagueId", "default#leagueId").toString()
+                    val discordId = sp.getString("discordId", "default#discordId").toString()
+
+                    val summonerNameDecrypted = cryptoManager.decrypt(summonerName)
+                    val summoner: Summoner = leagueApiHelper.getSummonerInfo(summonerNameDecrypted)
+
+                    sqlDbHelper.addUser(summonerName, summoner.id, discordId, 0)
+                    Log.d(TAG, "userInsert:success")
+                } catch(e: Exception) {
+                    e.message?.let { Log.e("Error", it) }
+                }
+            }
+
+
         } catch(e: Exception) {
             handleError(e)
         }
@@ -179,9 +185,11 @@ class SessionActivity : AppCompatActivity() {
 
     private fun createUser(uid: String): User {
         try {
+            val userName: String = filterInput(sp.getString("userName", "default#UserName").toString())
+
             return User(
                 uid,
-                sp.getString("userName", "default#UserName").toString(),
+                userName,
                 sp.getString("leagueId", "default#LeagueId").toString(),
                 sp.getString("discordId", "default#DiscordId").toString(),
                 ArrayList(),
@@ -192,11 +200,16 @@ class SessionActivity : AppCompatActivity() {
         }
     }
 
+    private fun filterInput(input: String): String {
+        val pattern = "[^A-Za-z0-9]".toRegex()
+        return pattern.replace(input, "")
+    }
+
     fun prevFragment() {
         supportFragmentManager.popBackStack()
     }
 
-    private fun showHomeScreen() {
+    fun showHomeScreen() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }

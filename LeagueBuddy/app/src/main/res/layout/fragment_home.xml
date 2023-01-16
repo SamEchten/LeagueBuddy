@@ -15,7 +15,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="40dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -45,11 +47,12 @@
                     android:background="@drawable/inputfield"
                     android:backgroundTint="@color/blueAccent"
                     android:padding="5dp"
-                    android:text="League of legends" />
+                    android:text="Latest news" />
 
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvNews"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="10" />

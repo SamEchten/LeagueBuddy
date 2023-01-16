@@ -34,10 +34,12 @@
                 android:typeface="normal" />
 
             <TextView
+                android:textColor="#a5a5a5"
                 android:id="@+id/tvRegistersubTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
+                android:paddingBottom="7dp"
                 android:text="@string/please_fill_in_your_discord_username_so_our_bot_can_communicate_with_you" />
 
             <EditText

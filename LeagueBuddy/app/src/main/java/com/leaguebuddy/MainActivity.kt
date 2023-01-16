@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.leaguebuddy.api.LeagueApiHelper
 import com.leaguebuddy.databinding.ActivityMainBinding
 import com.leaguebuddy.fragments.main.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navBar: BottomNavigationView
     private lateinit var binding : ActivityMainBinding
+    private lateinit var leagueApi : LeagueApiHelper
+    private val cryptoManager: CryptoManager = CryptoManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
