@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
         replaceFragment(HomeFragment())
 
         sqlDbHelper.userHasCredentials()
-        println(sqlDbHelper.getCurrentUserCredentials())
 
         navBar = findViewById(R.id.navBar)
         navBar.setOnItemSelectedListener {

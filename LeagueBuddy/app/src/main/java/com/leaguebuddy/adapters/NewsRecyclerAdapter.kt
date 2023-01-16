@@ -22,15 +22,10 @@ class NewsRecyclerAdapter(private val itemList: ArrayList<NewsArticle>): Recycle
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val curItem = newsItems[position]
-        println(curItem)
         holder.itemTitle.text = curItem.title
         holder.itemText.text = curItem.description
         holder.itemDate.text = curItem.date
         holder.itemImage.load(curItem.image)
-
-        holder.item.setOnClickListener{
-            println(curItem.link)
-        }
     }
 
     override fun getItemCount(): Int {

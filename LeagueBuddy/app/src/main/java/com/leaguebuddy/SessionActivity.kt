@@ -108,7 +108,16 @@ class SessionActivity : AppCompatActivity() {
 
         try {
             validateEmail(email)
-            firebaseCreateUser(email, password)
+            GlobalScope.launch {
+                val summonerName = sp.getString("leagueId", "default#leagueId").toString()
+                val decryptedSummonerName = cryptoManager.decrypt(summonerName)
+                try {
+                    leagueApiHelper.summonerNameExists(decryptedSummonerName)
+                    firebaseCreateUser(email, password)
+                } catch (e: Exception) {
+                    handleError(e)
+                }
+            }
         } catch(e: Exception) {
             handleError(e)
         }
@@ -121,8 +130,10 @@ class SessionActivity : AppCompatActivity() {
     }
 
    private fun handleError(e: Exception) {
-        showToast(e.message.toString())
-        Log.e(TAG, e.message.toString())
+        this.runOnUiThread { Runnable{
+            showToast(e.message.toString())
+            Log.e(TAG, e.message.toString())
+        } }
     }
 
     private fun getEncryptedCredentials(): Map<String, String> {

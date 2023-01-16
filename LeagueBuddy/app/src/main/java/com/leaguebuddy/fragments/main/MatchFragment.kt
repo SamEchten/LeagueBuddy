@@ -128,13 +128,4 @@ class MatchFragment : Fragment() {
             commit()
         }
     }
-
-    companion object {
-        var pusiPuu : String = "tecEajzxPe6Up_Y2B26x-rTdHpd07lTBD13vdfWud3TB8BnJux6UEXP7aw"
-        var BROHAN : String = "1LcBJ3AZathZ8el4_XSd_2GW5sEoUIV7e8jdMsow62IOF-AROCDF0ujlkw"
-        var RATIRL : String = "Vr3IUGGjYJEOOkaqSHiyl-SRsKG055BglnSVfPUjstXA_8s"
-        var Aeolxs : String = "q_t7xuxUZLz3-QzhYaR3eJqzQ3ugP6vTxm3rEmpqFXEs_ps7"
-        var kesha : String = "YFwLEUnlto9IPJUZH6uwMl8s_5hEFoy3QTWzsofET2KdUP6FT4thp6Rxpw"
-    }
-
 }

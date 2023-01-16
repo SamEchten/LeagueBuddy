@@ -68,7 +68,6 @@ class SqlDbHelper(context : Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
     }
 
     private fun removeUser() {
-        println("removing users from db")
         val db = this.writableDatabase
         db.delete(TABLE_USER, "1", null)
     }

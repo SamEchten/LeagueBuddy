@@ -37,7 +37,6 @@ class MatchStatsFragment : Fragment() {
     private fun loadLiveMatchData(){
         try{
             val liveMatch = (parentFragment as MatchFragment).liveMatch
-            println(liveMatch)
             createLiveSummonerItem(liveMatch.participants)
         }catch (e: Exception){
             println(e)

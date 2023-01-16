@@ -49,7 +49,7 @@ client.on("ready", () => {
     app.use(discordRouter)
     app.use(keyRouter)
 
-    server.listen(4848, () => {
+    server.listen(443, () => {
         console.log("Listening on port 4848")
         console.log("Bot is ready")
     })
