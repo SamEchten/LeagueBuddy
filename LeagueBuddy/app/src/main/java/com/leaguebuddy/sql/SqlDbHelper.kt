@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.text.BoringLayout
 import android.util.Log
 import com.leaguebuddy.dataClasses.UserV2
 import com.leaguebuddy.exceptions.NoCredentialsException
@@ -22,7 +21,7 @@ class SqlDbHelper(context : Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         onCreate(db)
     }
 
-    fun addUser(summonerName: String, summonerId : String, discordId : String,  profilePicId: Int){
+    fun addUser(summonerName: String, summonerId: String, discordId: String, profilePicId: Int){
         val values = ContentValues()
         values.put(SN_ID, summonerName)
         values.put(S_ID, summonerId)

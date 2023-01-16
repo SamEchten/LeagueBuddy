@@ -7,7 +7,7 @@
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_leaguebuddy_api_LeagueApiHelper_00024Keys_lolApiKey(JNIEnv *env, jobject thiz) {
-    std::string api_key = "RGAPI-4215fd98-6eb3-4cf8-a224-3668c8c63455";
+    std::string api_key = "RGAPI-f11bda65-19d0-4823-8b4c-d84d069bbb0d";
     return env->NewStringUTF(api_key.c_str());
 }
 

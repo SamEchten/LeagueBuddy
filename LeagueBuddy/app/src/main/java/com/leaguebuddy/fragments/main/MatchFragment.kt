@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.leaguebuddy.CryptoManager
 import com.leaguebuddy.LoaderFragment
 import com.leaguebuddy.MainActivity
 import com.leaguebuddy.R
@@ -19,6 +20,7 @@ import com.leaguebuddy.api.LeagueApiHelper
 import com.leaguebuddy.dataClasses.LiveMatch
 import com.leaguebuddy.fragments.main.matchFragments.MatchStatsFragment
 import com.leaguebuddy.fragments.main.matchFragments.SpellTimerFragment
+import com.leaguebuddy.sql.SqlDbHelper
 import kotlinx.coroutines.*
 import java.lang.Runnable
 
@@ -32,6 +34,8 @@ class MatchFragment : Fragment() {
     private var auth : FirebaseAuth = Firebase.auth
     private lateinit var linearLayoutHeader: LinearLayout
     lateinit var liveMatch: LiveMatch
+    private val sqlDbHelper = SqlDbHelper(mainActivity)
+    private val cryptoManager = CryptoManager()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,7 +60,14 @@ class MatchFragment : Fragment() {
                 auth.currentUser?.getIdToken(true)?.addOnCompleteListener { task ->
                     if(task.isSuccessful){
                         GlobalScope.launch{ Dispatchers.IO
-                            discordApiHelper.sendInviteLink(liveMatch, task.result.token.toString(), "Ouse Minx#6197")
+                            val user = sqlDbHelper.getCurrentUserCredentials()
+                            var discordId = cryptoManager.decrypt(user.discordId)
+                            val summonerId = cryptoManager.decrypt(user.summonerId)
+                            val publicKey = discordApiHelper.getPublicKey()
+
+                            discordId = cryptoManager.encryptUsingPublickey(discordId, publicKey).toString()
+
+                            discordApiHelper.sendInviteLink(liveMatch, task.result.token.toString(), discordId, summonerId)
                         }
                     } else {
                       Log.e("AUTH","User is not logged in")
@@ -65,7 +76,6 @@ class MatchFragment : Fragment() {
             }catch (e: Exception){
                 summonerNotInGame()
             }
-
         }
     }
     override fun onCreateView(

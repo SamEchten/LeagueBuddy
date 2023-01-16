@@ -3,31 +3,25 @@ package com.leaguebuddy
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.net.Credentials
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.leaguebuddy.api.LeagueApiHelper
+import com.leaguebuddy.dataClasses.Summoner
 import com.leaguebuddy.dataClasses.User
 import com.leaguebuddy.databinding.ActivityRegistrationBinding
 import com.leaguebuddy.exceptions.*
 import com.leaguebuddy.fragments.session.LoginFragment
-import com.leaguebuddy.fragments.session.RegisterFragment
-import com.leaguebuddy.fragments.session.RegisterLeagueFragment
 import com.leaguebuddy.sql.SqlDbHelper
 import kotlinx.coroutines.*
-import kotlinx.coroutines.tasks.await
 
 class SessionActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegistrationBinding
@@ -36,6 +30,8 @@ class SessionActivity : AppCompatActivity() {
     private val auth = Firebase.auth
     private val cryptoManager: CryptoManager = CryptoManager()
     private val TAG = "REGISTRATION"
+    private val sqlDbHelper: SqlDbHelper = SqlDbHelper(this)
+    private val leagueApiHelper: LeagueApiHelper = LeagueApiHelper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -165,7 +161,23 @@ class SessionActivity : AppCompatActivity() {
         try {
             val user: User = createUser(uid)
             db.collection("users").add(user)
-            Log.d(TAG, "userInsert:success")
+
+            GlobalScope.launch {
+                try {
+                    val summonerName = sp.getString("leagueId", "default#leagueId").toString()
+                    val discordId = sp.getString("discordId", "default#discordId").toString()
+
+                    val summonerNameDecrypted = cryptoManager.decrypt(summonerName)
+                    val summoner: Summoner = leagueApiHelper.getSummonerInfo(summonerNameDecrypted)
+
+                    sqlDbHelper.addUser(summonerName, summoner.id, discordId, 0)
+                    Log.d(TAG, "userInsert:success")
+                } catch(e: Exception) {
+                    e.message?.let { Log.e("Error", it) }
+                }
+            }
+
+
         } catch(e: Exception) {
             handleError(e)
         }

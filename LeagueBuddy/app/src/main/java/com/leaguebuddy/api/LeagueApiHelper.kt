@@ -21,7 +21,7 @@ class LeagueApiHelper {
      * @return Summoner
      * @sample Summoner
      */
-    fun getSummonerInfo(summonerName: String) : Summoner {
+    suspend fun getSummonerInfo(summonerName: String) : Summoner {
         if(summonerName.length < 16){
             val url = HttpUrl.Builder()
                 .scheme("https")
@@ -38,7 +38,7 @@ class LeagueApiHelper {
                 .url(url)
                 .build()
 
-            val response = client.newCall(request).execute()
+            val response = client.newCall(request).await()
             if(response.isSuccessful) {
                 val result = response.body?.string()
                 if (result != null) {
@@ -417,8 +417,8 @@ class LeagueApiHelper {
             jsonObject.getString("accountId"),
             jsonObject.getString("puuid"),
             jsonObject.getString("name"),
-            jsonObject.getString("profileIconId")as Int,
-            jsonObject.getString("summonerLevel")as Int
+            jsonObject.getString("profileIconId"),
+            jsonObject.getString("summonerLevel")
         )
     }
 

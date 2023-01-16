@@ -2,6 +2,7 @@ package com.leaguebuddy.api
 
 import android.util.Log
 import com.google.gson.Gson
+import com.leaguebuddy.CryptoManager
 import com.leaguebuddy.dataClasses.LiveMatch
 import com.leaguebuddy.dataClasses.discord.DiscordGame
 import com.leaguebuddy.dataClasses.discord.DiscordPostBody
@@ -11,13 +12,35 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.ResponseBody
 import ru.gildor.coroutines.okhttp.await
 
 class DiscordApiHelper {
     private var client : OkHttpClient = OkHttpClient()
     private var gson : Gson = Gson()
 
-    suspend fun sendInviteLink(liveMatch: LiveMatch, authKey: String, discordId: String){
+    suspend fun getPublicKey(): String {
+        val url = HttpUrl.Builder()
+            .scheme("https")
+            .host("localhost:4848")
+            .addPathSegment("api")
+            .addPathSegment("publickey")
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        val response = client.newCall(request).await()
+        if(response.isSuccessful){
+            return response.body.toString()
+        }else  {
+            Log.d("Discord bot", "Could not retreive public key")
+            throw Exception("Could not retreive public key")
+        }
+    }
+
+    suspend fun sendInviteLink(liveMatch: LiveMatch, authKey: String, discordId: String, summonerId: String){
         val body = DiscordPostBody(
             DiscordUser(
                 discordId,
@@ -25,13 +48,13 @@ class DiscordApiHelper {
             ),
             DiscordGame(
                 liveMatch.gameId,
-                liveMatch.getTeamCodeBySummonerId("q_t7xuxUZLz3-QzhYaR3eJqzQ3ugP6vTxm3rEmpqFXEs_ps7")
+                liveMatch.getTeamCodeBySummonerId(summonerId)
             )
         )
 
         val url = HttpUrl.Builder()
             .scheme("https")
-            .host("4344-2a02-a467-14f7-1-d02d-20e2-d8bd-1200.eu.ngrok.io")
+            .host("localhost:4848")
             .addPathSegment("api")
             .addPathSegment("discord")
             .addPathSegment("createChannel")

@@ -5,6 +5,6 @@ data class Summoner(
     val accountId: String,
     val puuid: String,
     val name: String,
-    val profileIconId : Int,
-    val summonerLevel: Int
+    val profileIconId : String,
+    val summonerLevel: String
 )
