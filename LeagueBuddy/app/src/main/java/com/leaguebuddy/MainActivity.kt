@@ -22,7 +22,8 @@ class MainActivity : AppCompatActivity() {
         replaceFragment(HomeFragment())
 
         val text = "dit is een test bericht"
-        val cipher = cryptoManager.encryptUsingPublickey(text, "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApUM//UNNYPwyre1rEFMs\n" +
+        val cipher = cryptoManager.encryptUsingPublickey(text,
+                "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApUM//UNNYPwyre1rEFMs\n" +
                 "8+thBZhecmlAyGCtM8q9CnpQuBqtBDwATDTU63Jg53nAO0FuaBvVTVekrY6rs6fe\n" +
                 "hK/YNG9ga5obqPQ2D+QkqHq3Iud6x6yDSF7uzAOXFuU3egYUJH2+vt+FDyF3lRWf\n" +
                 "RysBxIHp3N2OtWigXXrpRnL3th93PYnoTvrOE6t524oreDbyELJy3A/aewKeRdpt\n" +

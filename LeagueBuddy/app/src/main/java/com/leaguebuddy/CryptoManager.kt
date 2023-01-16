@@ -48,7 +48,7 @@ class CryptoManager {
         val keyFactory = KeyFactory.getInstance("RSA")
         val publicKey = keyFactory.generatePublic(keySpec)
         val cipher =
-            Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding") // specify the encryption algorithm
+            Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC") // specify the encryption algorithm
         cipher.init(Cipher.ENCRYPT_MODE, publicKey) // initialize the cipher with encrypt
         return Base64.encodeToString(cipher.doFinal(plainText.toByteArray()), Base64.DEFAULT)
     }
