@@ -8,10 +8,12 @@ import androidx.annotation.RequiresApi
 import com.leaguebuddy.exceptions.EncryptionException
 import com.leaguebuddy.exceptions.InvalidCipherTextException
 import java.security.KeyStore
+import java.security.spec.X509EncodedKeySpec
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
+import java.security.KeyFactory
 
 @RequiresApi(Build.VERSION_CODES.M)
 class CryptoManager {
@@ -38,6 +40,17 @@ class CryptoManager {
         } catch(e: Exception) {
             throw EncryptionException()
         }
+    }
+
+    fun encryptUsingPublickey(plainText: String, publicKeyString: String): String? {
+        val encodedPublicKey = Base64.decode(publicKeyString.replace("\n", ""), 0)
+        val keySpec = X509EncodedKeySpec(encodedPublicKey)
+        val keyFactory = KeyFactory.getInstance("RSA")
+        val publicKey = keyFactory.generatePublic(keySpec)
+        val cipher =
+            Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding") // specify the encryption algorithm
+        cipher.init(Cipher.ENCRYPT_MODE, publicKey) // initialize the cipher with encrypt
+        return Base64.encodeToString(cipher.doFinal(plainText.toByteArray()), Base64.DEFAULT)
     }
 
     fun decrypt(cipherText: String): String {
