@@ -12,6 +12,8 @@ Discord: https://discord.com/register
 
 Once you have created a discord account you'll have to join the League Buddy discord server, this is needed so the bot can send you an invite link.
 
+Discord server: https://discord.gg/CJzu22Ke
+
 ## Setting up the application
 
 Before you can fully use the application you'll need to setup and run the API. In order to run the API you'll need to add the .env file to the directory provided in the assignment folder. Once the .env file is added you can run the following command:
