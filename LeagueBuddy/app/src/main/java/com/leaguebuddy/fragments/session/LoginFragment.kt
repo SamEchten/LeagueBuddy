@@ -1,6 +1,7 @@
 package com.leaguebuddy.fragments.session
 
 import android.os.Bundle
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import android.widget.Button
 import android.widget.EditText
 import com.leaguebuddy.R
 import com.leaguebuddy.SessionActivity
+import com.leaguebuddy.exceptions.InvalidEmailException
+import com.leaguebuddy.exceptions.InvalidPasswordException
 
 class LoginFragment : Fragment() {
     private lateinit var etEmail: EditText

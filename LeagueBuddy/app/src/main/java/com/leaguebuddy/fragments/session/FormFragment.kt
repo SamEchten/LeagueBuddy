@@ -22,4 +22,9 @@ abstract class FormFragment: Fragment() {
     protected fun showToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
+
+    protected fun filterInput(input: String): String {
+        val pattern = "[^A-Za-z0-9]".toRegex()
+        return pattern.replace(input, "")
+    }
 }

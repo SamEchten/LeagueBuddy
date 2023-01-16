@@ -12,6 +12,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navBar: BottomNavigationView
     private lateinit var binding : ActivityMainBinding
     private lateinit var leagueApi : LeagueApiHelper
+    private val cryptoManager: CryptoManager = CryptoManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +21,16 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
         replaceFragment(HomeFragment())
 
-        println("DONE")
+        val text = "dit is een test bericht"
+        val cipher = cryptoManager.encryptUsingPublickey(text,
+                "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApUM//UNNYPwyre1rEFMs\n" +
+                "8+thBZhecmlAyGCtM8q9CnpQuBqtBDwATDTU63Jg53nAO0FuaBvVTVekrY6rs6fe\n" +
+                "hK/YNG9ga5obqPQ2D+QkqHq3Iud6x6yDSF7uzAOXFuU3egYUJH2+vt+FDyF3lRWf\n" +
+                "RysBxIHp3N2OtWigXXrpRnL3th93PYnoTvrOE6t524oreDbyELJy3A/aewKeRdpt\n" +
+                "cebQhKf5CDqZjrQpmGABHcgERhtJCdrdm6O3p6aMlVoG94OiOzzs98M+o3g9ti64\n" +
+                "lZR44ybtXtBgd5DmlcABSkKjjfONXFXRSMx0glQd+TYWxhVtzEJOcy9WNtUUqZuD\n" +
+                "IwIDAQAB")
+        print(cipher)
 
         navBar = findViewById(R.id.navBar)
         navBar.setOnItemSelectedListener {
