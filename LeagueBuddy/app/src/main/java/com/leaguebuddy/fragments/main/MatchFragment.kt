@@ -20,7 +20,6 @@ import com.leaguebuddy.dataClasses.LiveMatch
 import com.leaguebuddy.fragments.main.matchFragments.MatchStatsFragment
 import com.leaguebuddy.fragments.main.matchFragments.SpellTimerFragment
 import kotlinx.coroutines.*
-import okhttp3.Dispatcher
 import java.lang.Runnable
 
 class MatchFragment : Fragment() {
@@ -54,24 +53,19 @@ class MatchFragment : Fragment() {
 
 
                 // Send channel invite
-//                auth.currentUser?.getIdToken(true)?.addOnCompleteListener { task ->
-//                    if(task.isSuccessful){
-//                        GlobalScope.launch{ Dispatchers.IO
-//                            discordApiHelper.sendInviteLink(task.result.token.toString(), "Ouse Minx#6197")
-//                        }
-//                    } else {
-//                      Log.e("AUTH","User is not logged in")
-//                    }
-//                }
+                auth.currentUser?.getIdToken(true)?.addOnCompleteListener { task ->
+                    if(task.isSuccessful){
+                        GlobalScope.launch{ Dispatchers.IO
+                            discordApiHelper.sendInviteLink(liveMatch, task.result.token.toString(), "Ouse Minx#6197")
+                        }
+                    } else {
+                      Log.e("AUTH","User is not logged in")
+                    }
+                }
             }catch (e: Exception){
                 summonerNotInGame()
             }
 
-            try {
-                discordApiHelper.sendInviteLink(liveMatch,"asda", "Ouse Minx#6197")
-            }catch (e: Exception) {
-                println(e)
-            }
         }
     }
     override fun onCreateView(

@@ -6,12 +6,10 @@ import com.leaguebuddy.dataClasses.LiveMatch
 import com.leaguebuddy.dataClasses.discord.DiscordGame
 import com.leaguebuddy.dataClasses.discord.DiscordPostBody
 import com.leaguebuddy.dataClasses.discord.DiscordUser
-import net.pwall.json.JSON
 import okhttp3.HttpUrl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import ru.gildor.coroutines.okhttp.await
 
@@ -19,7 +17,7 @@ class DiscordApiHelper {
     private var client : OkHttpClient = OkHttpClient()
     private var gson : Gson = Gson()
 
-    suspend fun sendInviteLink(liveMatch: LiveMatch, authKey: String, discordId : String){
+    suspend fun sendInviteLink(liveMatch: LiveMatch, authKey: String, discordId: String){
         val body = DiscordPostBody(
             DiscordUser(
                 discordId,
